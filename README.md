@@ -13,7 +13,7 @@ git clone git@github.com:vesalukkarila/songs-api.git
 mvn package
 ```
 ```sh
-java -jar target/.....
+java -jar target/songsapi-1.0-SNAPSHOT.jar
  ```
 
 
