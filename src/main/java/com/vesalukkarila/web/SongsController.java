@@ -1,8 +1,13 @@
 package com.vesalukkarila.web;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class SongsController {
-    /*TODO: add basic greetings response for GET "/"*/
+
+    @GetMapping("/")
+    public String greeting() {
+        return "Hello world from SongsController";
+    }
 }
