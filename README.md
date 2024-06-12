@@ -22,7 +22,13 @@ java -jar target/.....
 ## Hello world to test API
 ### Request
 `GET /`
+```sh
+curl http://localhost:8080/
+
 ### Response
+String
+`"Hello world from SongsController"`
+
 
 ## Get all songs
 ### Request
