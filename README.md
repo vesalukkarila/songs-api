@@ -24,6 +24,7 @@ java -jar target/songsapi-1.0-SNAPSHOT.jar
 `GET /`
 ```sh
 curl http://localhost:8080/
+```
 
 ### Response
 String
