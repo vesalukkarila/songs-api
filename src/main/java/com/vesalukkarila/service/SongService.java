@@ -2,6 +2,7 @@ package com.vesalukkarila.service;
 
 import com.vesalukkarila.model.Song;
 import jakarta.annotation.PostConstruct;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
@@ -14,16 +15,18 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @Component
 public class SongService {
-    // TODO: add field JdbcTemplate use constructor injection
+
+    private final JdbcTemplate jdbcTemplate;
     private final SimpleJdbcInsert simpleJdbcInsert;
 
-    public SongService(SimpleJdbcInsert simpleJdbcInsert) {
+    public SongService(JdbcTemplate jdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
+        this.jdbcTemplate = jdbcTemplate;
         this.simpleJdbcInsert = simpleJdbcInsert;
     }
 
     /*TODO: 1. refactor to use createSong
     *       2. later: create class that runs e.g. in "dev" mode and populates database with few Songs
-    *       3. consider: should in-memory db be cleared after n-inputs or even on application shutdown*/
+    *       3. consider: should in-memory db be cleared after n-inputs/on application shutdown/through endpoint*/
 //    @PostConstruct
 //    public void init() {
 //        songs.add(new Song("Thunderstruck", "AC/DC", 1990));

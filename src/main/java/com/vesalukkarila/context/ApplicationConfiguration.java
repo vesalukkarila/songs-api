@@ -6,6 +6,7 @@ import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
@@ -21,8 +22,6 @@ public class ApplicationConfiguration {
         return new ObjectMapper();
     }
 
-    // TODO: Beans; datasource, jdbcTemplate(datasource), simpleJdbcInsert(jdbcTemplate)
-    //TODO: create schema.sql to resources, make datasource run that script
     // TODO: later; find out how to allow multiple access to database simultaneously (properties?, through datasource(?))
     @Bean
     public JdbcDataSource jdbcDataSource() {
@@ -34,8 +33,13 @@ public class ApplicationConfiguration {
     }
 
     @Bean
+    public JdbcTemplate jdbcTemplate() {
+        return new JdbcTemplate(jdbcDataSource());
+    }
+
+    @Bean
     public SimpleJdbcInsert simpleJdbcInsert() {
-        return new SimpleJdbcInsert(jdbcDataSource())
+        return new SimpleJdbcInsert(jdbcTemplate())
                 .withTableName("songs")
                 .usingColumns("name", "artist", "publishYear")
                 .usingGeneratedKeyColumns("id");
