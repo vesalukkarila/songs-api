@@ -40,12 +40,20 @@ String
 curl http://localhost:8080/songs
 ```
 ### Response
+#### Header  
+Status: 200 ok  
+Content-Type: application/json  
+#### Body  
 
 ```json
 
-{
-"key":"value"
-}
+[
+    {
+        "name": "Thunderstruck",
+        "artist": "AC/DC",
+        "year": 1990
+    }
+]
 
 ```
 
