@@ -42,6 +42,7 @@
             <version>2.15.0</version>
         </dependency>
 
+        <!-- TODO dependencies for h2-in-memory db and jdbc driver(version needs to align with Spring's version)-->
     </dependencies>
 
     <build>

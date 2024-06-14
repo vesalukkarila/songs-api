@@ -16,4 +16,8 @@ public class ApplicationConfiguration {
     public ObjectMapper objectMapper() {
         return new ObjectMapper();
     }
+
+    // TODO: Beans; datasource, jdbcTemplate(datasource), simpleJdbcInsert(jdbcTemplate)
+    //TODO: create schema.sql to resources, make datasource run that script
+    // TODO: later; find out how to allow multiple access to database simultaneously (properties?, through datasource(?))
 }

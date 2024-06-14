@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 public class SongsController {
 
-    private SongService songService;
+    private final SongService songService;
 
     public SongsController(SongService songService) {
         this.songService = songService;
@@ -25,4 +25,7 @@ public class SongsController {
     public List<Song> getSongs() {
         return songService.getSongs();
     }
+
+    //TODO endpoint POST /songs, extract 3 path variables
+    // later: add validation for path variables
 }

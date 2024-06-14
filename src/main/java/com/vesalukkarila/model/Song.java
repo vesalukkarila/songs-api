@@ -3,6 +3,7 @@ package com.vesalukkarila.model;
 
 public class Song {
 
+    // TODO: add String id-field, empty constructor, setters for all
     private String name, artist;
     private Integer year;
 
