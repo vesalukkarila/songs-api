@@ -3,6 +3,8 @@ package com.vesalukkarila.web;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -26,6 +28,12 @@ public class SongsController {
         return songService.getSongs();
     }
 
-    //TODO endpoint POST /songs, extract 3 path variables
-    // later: add validation for path variables
+
+    // TODO: add validation for path variables
+    @PostMapping("/songs/{name}/{artist}/{publishYear}")
+    public Song createSong(@PathVariable ("name") String name,
+                           @PathVariable ("artist") String artist,
+                           @PathVariable ("publishYear") Integer publishYear) {
+        return songService.createSong(name, artist, publishYear);
+    }
 }

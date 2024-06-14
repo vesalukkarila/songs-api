@@ -30,6 +30,10 @@ public class SongService {
         return songs;
     }
 
+
     //TODO: createSong, use simpleJbdcInsert, simpler and more readable than jdbcTemplate for creation
     // TODO: later; check that same song&artist&year instance is not already in database
+    public Song createSong(String name, String artist, Integer publishYear) {
+        return new Song(name,artist,publishYear);
+    }
 }
