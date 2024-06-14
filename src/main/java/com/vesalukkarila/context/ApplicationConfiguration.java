@@ -10,8 +10,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.sql.DataSource;
-
 @Configuration
 @ComponentScan(basePackageClasses = ApplicationLauncher.class)
 @EnableWebMvc
