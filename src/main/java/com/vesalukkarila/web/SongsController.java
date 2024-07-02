@@ -34,11 +34,14 @@ public class SongsController {
         return songService.getSongs();
     }
 
+    //TODO add check in service layer if id does not exist in database->songnotfound->globalexceptionhandler
     @GetMapping("/songs/{id}")
     public Song getSongById(@PathVariable("id") String id){
         return songService.getSongById(id);
+
     }
 
+    //TODO add validation
     @PostMapping("/songs")
     public ResponseEntity<Song> createSong(@RequestBody SongDto songDto){
         Song song = songService.createSong(
