@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class SongsController {
@@ -19,8 +21,10 @@ public class SongsController {
     }
 
     @GetMapping("/")
-    public String greeting() {
-        return "Hello world from SongsController";
+    public Map<String, String> greeting() {
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Hello from Songs API");
+        return response;
     }
 
     @GetMapping("/songs")
