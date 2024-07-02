@@ -1,6 +1,7 @@
 package com.vesalukkarila.service;
 
 import com.vesalukkarila.model.Song;
+import com.vesalukkarila.web.SongNotFoundException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -41,7 +42,11 @@ public class SongService {
 
     public Song getSongById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
-        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new SongRowMapper());
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{id}, new SongRowMapper());
+        }catch (Exception e){
+            throw new SongNotFoundException(id);
+        }
     }
 
     // TODO: later; check that same song&artist&year instance is not already in database
