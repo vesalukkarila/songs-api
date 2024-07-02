@@ -39,6 +39,10 @@ public class SongService {
         return jdbcTemplate.query(sql, new SongRowMapper());
     }
 
+    public Song getSongById(String id) {
+        String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{id}, new SongRowMapper());
+    }
 
     // TODO: later; check that same song&artist&year instance is not already in database
     //TODO, fix: atm db uses auto incremented int as primary key, Song uses UUID.random

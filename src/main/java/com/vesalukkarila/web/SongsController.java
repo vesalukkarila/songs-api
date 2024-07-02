@@ -30,6 +30,11 @@ public class SongsController {
         return songService.getSongs();
     }
 
+    @GetMapping("/songs/{id}")
+    public Song getSongById(@PathVariable("id") String id){
+        return songService.getSongById(id);
+    }
+
     @PostMapping("/songs")
     public Song createSong(@RequestBody SongDto songDto){
         return songService.createSong(songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
