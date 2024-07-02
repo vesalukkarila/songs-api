@@ -1,6 +1,7 @@
 package com.vesalukkarila.service;
 
 import com.vesalukkarila.model.Song;
+import com.vesalukkarila.web.SongAlreadyExistsException;
 import com.vesalukkarila.web.SongNotFoundException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,17 +50,26 @@ public class SongService {
         }
     }
 
-    // TODO: later; check that same song&artist&year instance is not already in database
     //TODO, fix: atm db uses auto incremented int as primary key, Song uses UUID.random
     public Song createSong(String name, String artist, Integer publishYear) {
-        String id = insertSongIntoDatabase(name,artist,publishYear);
+        if (songExists(name, artist, publishYear)){
+            throw new SongAlreadyExistsException(name, artist, publishYear);
+        }else {
+            String id = insertSongIntoDatabase(name, artist, publishYear);
 
-        Song song = new Song();
-        song.setId(id);
-        song.setName(name);
-        song.setArtist(artist);
-        song.setPublishYear(publishYear);
-        return song;
+            Song song = new Song();
+            song.setId(id);
+            song.setName(name);
+            song.setArtist(artist);
+            song.setPublishYear(publishYear);
+            return song;
+        }
+    }
+
+    private boolean songExists(String name, String artist, Integer publishYear){
+        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{name, artist, publishYear}, Integer.class);
+        return count != null && count > 0;
     }
 
     private String insertSongIntoDatabase(String name, String artist, Integer publishYear) {
