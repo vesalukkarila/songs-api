@@ -30,21 +30,21 @@ public class SongsController {
         return response;
     }
 
+
     @GetMapping("/songs")
     public List<Song> getSongs() {
         return songService.getSongs();
     }
 
-    //TODO add check in service layer if id does not exist in database->songnotfound->globalexceptionhandler
-    @GetMapping("/songs/{id}")
-    public Song getSongById(@PathVariable("id") String id){
-        return songService.getSongById(id);
 
+    @GetMapping("/songs/{id}")
+    public Song getSongById(@PathVariable("id") String id) {
+        return songService.getSongById(id);
     }
 
-    //TODO add validation
+
     @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody @Valid SongDto songDto){
+    public ResponseEntity<Song> createSong(@RequestBody @Valid SongDto songDto) {
         Song song = songService.createSong(
                 songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
 

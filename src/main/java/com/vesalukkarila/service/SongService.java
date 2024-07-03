@@ -36,10 +36,12 @@ public class SongService {
         }
     }
 
+
     public List<Song> getSongs() {
         String sql = "SELECT id, name, artist, publishYear FROM songs";
         return jdbcTemplate.query(sql, new SongRowMapper());
     }
+
 
     public Song getSongById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
@@ -49,6 +51,7 @@ public class SongService {
             throw new SongNotFoundException(id);
         }
     }
+
 
     //TODO, fix: atm db uses auto incremented int as primary key, Song uses UUID.random
     public Song createSong(String name, String artist, Integer publishYear) {
@@ -66,11 +69,13 @@ public class SongService {
         }
     }
 
+
     private boolean songExists(String name, String artist, Integer publishYear){
         String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
         Integer count = jdbcTemplate.queryForObject(sql, new Object[]{name, artist, publishYear}, Integer.class);
         return count != null && count > 0;
     }
+
 
     private String insertSongIntoDatabase(String name, String artist, Integer publishYear) {
         Map<String, Object> parameters = new HashMap<>();
@@ -80,6 +85,7 @@ public class SongService {
         Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
         return key.toString();
     }
+
 
     private static class SongRowMapper implements RowMapper<Song> {
         @Override

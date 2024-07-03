@@ -12,6 +12,7 @@ public class YearRangeValidator implements ConstraintValidator<YearRange, Intege
     public void initialize(YearRange constraintAnnotation) {
     }
 
+
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
         if (value == null){

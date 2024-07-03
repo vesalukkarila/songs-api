@@ -11,13 +11,16 @@ public class SongDto {
     @YearRange
     private Integer publishYear;
 
+
     public String getName() {
         return name;
     }
 
+
     public String getArtist() {
         return artist;
     }
+
 
     public Integer getPublishYear() {
         return publishYear;
