@@ -1,8 +1,9 @@
-package com.vesalukkarila.web;
+package com.vesalukkarila.web.controller;
 
 import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class SongsController {
 
     //TODO add validation
     @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody SongDto songDto){
+    public ResponseEntity<Song> createSong(@RequestBody @Valid SongDto songDto){
         Song song = songService.createSong(
                 songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
 

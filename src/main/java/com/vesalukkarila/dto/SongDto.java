@@ -1,7 +1,14 @@
 package com.vesalukkarila.dto;
 
+import com.vesalukkarila.web.validation.YearRange;
+import jakarta.validation.constraints.NotBlank;
+
 public class SongDto {
-    private String name, artist;
+    @NotBlank
+    private String name;
+    @NotBlank
+    private String artist;
+    @YearRange
     private Integer publishYear;
 
     public String getName() {

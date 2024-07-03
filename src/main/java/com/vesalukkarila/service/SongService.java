@@ -1,8 +1,8 @@
 package com.vesalukkarila.service;
 
 import com.vesalukkarila.model.Song;
-import com.vesalukkarila.web.SongAlreadyExistsException;
-import com.vesalukkarila.web.SongNotFoundException;
+import com.vesalukkarila.web.exception.SongAlreadyExistsException;
+import com.vesalukkarila.web.exception.SongNotFoundException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

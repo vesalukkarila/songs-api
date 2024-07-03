@@ -1,4 +1,4 @@
-package com.vesalukkarila.web;
+package com.vesalukkarila.web.exception;
 
 public class SongNotFoundException extends RuntimeException{
     public SongNotFoundException(String id){
