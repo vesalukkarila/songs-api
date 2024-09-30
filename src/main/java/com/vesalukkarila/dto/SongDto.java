@@ -1,5 +1,6 @@
 package com.vesalukkarila.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vesalukkarila.web.validation.YearRange;
 import jakarta.validation.constraints.NotBlank;
 
@@ -8,6 +9,7 @@ public class SongDto {
     private String name;
     @NotBlank
     private String artist;
+    @JsonProperty("publish_year")
     @YearRange
     private Integer publishYear;
 

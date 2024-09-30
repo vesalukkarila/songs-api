@@ -11,6 +11,7 @@ public class Song {
     //  Find out how db could use that or something similar too, problem was with retrieving uuid from db with
     //  simplejdbcinsert.executeandreturnkey method -> returned Number
     private String id, name, artist;
+    @JsonProperty("publish_year")
     private Integer publishYear;
 
     public Song() {
