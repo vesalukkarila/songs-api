@@ -39,7 +39,6 @@ public class ApplicationConfiguration {
     public SimpleJdbcInsert simpleJdbcInsert() {
         return new SimpleJdbcInsert(jdbcTemplate())
                 .withTableName("songs")
-                .usingColumns("name", "artist", "publishYear")
-                .usingGeneratedKeyColumns("id");
+                .usingColumns("id", "name", "artist", "publishYear");
     }
 }

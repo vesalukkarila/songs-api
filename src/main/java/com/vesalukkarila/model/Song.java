@@ -7,10 +7,8 @@ import java.util.UUID;
 
 public class Song {
 
-    // TODO: 1st step; db will have autoincremented int-id for starters, this class has random string for now.
-    //  Find out how db could use that or something similar too, problem was with retrieving uuid from db with
-    //  simplejdbcinsert.executeandreturnkey method -> returned Number
-    private String id, name, artist;
+    private UUID id;
+    private String name, artist;
     @JsonProperty("publish_year")
     private Integer publishYear;
 
@@ -18,13 +16,13 @@ public class Song {
     }
 
     public Song(String name, String artist, Integer publishYear) {
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID();
         this.name = name;
         this.artist = artist;
         this.publishYear = publishYear;
     }
 
-    public void setId(String id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
@@ -40,7 +38,7 @@ public class Song {
         this.publishYear = publishYear;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 

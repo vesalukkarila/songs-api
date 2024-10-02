@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS songs (
-id              INT AUTO_INCREMENT PRIMARY KEY,
+id              UUID PRIMARY KEY,
 name            VARCHAR(255),
 artist          VARCHAR(255),
 publishYear     INT

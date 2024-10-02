@@ -15,16 +15,15 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Component
 public class SongService {
 
     private final JdbcTemplate jdbcTemplate;
-    private final SimpleJdbcInsert simpleJdbcInsert;
 
     public SongService(JdbcTemplate jdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
         this.jdbcTemplate = jdbcTemplate;
-        this.simpleJdbcInsert = simpleJdbcInsert;
     }
 
     /*TODO: 1. later: create class that runs e.g. in "dev" mode and populates database with few Songs
@@ -53,18 +52,14 @@ public class SongService {
     }
 
 
-    //TODO, fix: atm db uses auto incremented int as primary key, Song uses UUID.random
     public Song createSong(String name, String artist, Integer publishYear) {
         if (songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name, artist, publishYear);
         }else {
-            String id = insertSongIntoDatabase(name, artist, publishYear);
-
-            Song song = new Song();
+            UUID id = UUID.randomUUID();
+            insertSongIntoDatabase(id, name, artist, publishYear);
+            Song song = new Song(name, artist, publishYear);
             song.setId(id);
-            song.setName(name);
-            song.setArtist(artist);
-            song.setPublishYear(publishYear);
             return song;
         }
     }
@@ -77,13 +72,9 @@ public class SongService {
     }
 
 
-    private String insertSongIntoDatabase(String name, String artist, Integer publishYear) {
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("name", name);
-        parameters.put("artist", artist);
-        parameters.put("publishYear", publishYear);
-        Number key = simpleJdbcInsert.executeAndReturnKey(new MapSqlParameterSource(parameters));
-        return key.toString();
+    private void insertSongIntoDatabase(UUID id, String name, String artist, Integer publishYear) {
+        String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?, ?, ?, ?)";
+        this.jdbcTemplate.update(sql, id.toString(), name, artist, publishYear);
     }
 
 
@@ -91,7 +82,7 @@ public class SongService {
         @Override
         public Song mapRow(ResultSet rs, int rowNum) throws SQLException {
             Song song = new Song();
-            song.setId(rs.getString("id"));
+            song.setId(UUID.fromString(rs.getString("id")));
             song.setName(rs.getString("name"));
             song.setArtist(rs.getString("artist"));
             song.setPublishYear(rs.getInt("publishYear"));
