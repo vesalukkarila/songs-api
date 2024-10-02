@@ -46,7 +46,7 @@ public class SongService {
     public Song getSongById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{id}, new SongRowMapper());
+            return jdbcTemplate.queryForObject(sql, new SongRowMapper(), id);
         }catch (Exception e){
             throw new SongNotFoundException(id);
         }
@@ -72,7 +72,7 @@ public class SongService {
 
     private boolean songExists(String name, String artist, Integer publishYear){
         String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, new Object[]{name, artist, publishYear}, Integer.class);
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
         return count != null && count > 0;
     }
 
