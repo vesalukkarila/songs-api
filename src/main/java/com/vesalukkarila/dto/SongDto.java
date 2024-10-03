@@ -28,11 +28,11 @@ public class SongDto {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name.trim();
     }
 
     public void setArtist(String artist) {
-        this.artist = artist;
+        this.artist = artist.trim();
     }
 
     public void setPublishYear(Integer publishYear) {
