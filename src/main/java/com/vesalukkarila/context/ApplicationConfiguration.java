@@ -35,10 +35,4 @@ public class ApplicationConfiguration {
         return new JdbcTemplate(jdbcDataSource());
     }
 
-    @Bean
-    public SimpleJdbcInsert simpleJdbcInsert() {
-        return new SimpleJdbcInsert(jdbcTemplate())
-                .withTableName("songs")
-                .usingColumns("id", "name", "artist", "publishYear");
-    }
 }

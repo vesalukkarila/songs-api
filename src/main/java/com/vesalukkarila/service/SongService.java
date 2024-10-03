@@ -22,7 +22,7 @@ public class SongService {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public SongService(JdbcTemplate jdbcTemplate, SimpleJdbcInsert simpleJdbcInsert) {
+    public SongService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
