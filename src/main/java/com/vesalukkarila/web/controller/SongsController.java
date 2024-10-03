@@ -13,6 +13,8 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.regex.Pattern;
 
 @RestController
 public class SongsController {
@@ -38,8 +40,17 @@ public class SongsController {
 
 
     @GetMapping("/songs/{id}")
-    public Song getSongById(@PathVariable("id") String id) {
-        return songService.getSongById(id);
+    public ResponseEntity<Song> getSongById(@PathVariable("id") String uuidStr) {
+        try{
+            if (!isValidUUID(uuidStr)){
+                throw new IllegalArgumentException("Invalid UUID format: " + uuidStr);
+            }
+            Song song = songService.getSongById(uuidStr);
+            return ResponseEntity.ok(song);         //found?? as responsestatus
+
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
 
@@ -52,5 +63,10 @@ public class SongsController {
         headers.setLocation(URI.create("/songs/" + song.getId()));
 
         return new ResponseEntity<>(song, headers, HttpStatus.CREATED);
+    }
+
+    private boolean isValidUUID(String uuidStr){
+        String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+        return Pattern.matches(uuidRegex, uuidStr);
     }
 }
