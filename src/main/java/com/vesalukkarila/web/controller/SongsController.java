@@ -1,6 +1,7 @@
 package com.vesalukkarila.web.controller;
 
 import com.vesalukkarila.dto.SongDto;
+import com.vesalukkarila.dto.SongPatchDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
 import com.vesalukkarila.web.exception.InvalidUUIDException;
@@ -65,6 +66,19 @@ public class SongsController {
         }
         Song song = this.songService.updateSong(id, songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
         return new ResponseEntity<>(song, HttpStatus.OK);
+    }
+
+    @PatchMapping("/songs/{id}")
+    public ResponseEntity<Song> patchSong(@PathVariable("id") String id,
+                                          @RequestBody SongPatchDto songPatchDto){
+        if (notValidUUID(id)){
+            throw new InvalidUUIDException(id);
+        }
+        Song existingSong = this.songService.getSongById(id);
+        existingSong = songPatchDto.updateFields(existingSong);
+        Song updatedSong = this.songService.patchSong(existingSong);
+        return new ResponseEntity<>(updatedSong, HttpStatus.OK);
+
     }
 
     @DeleteMapping("/songs/{id}")

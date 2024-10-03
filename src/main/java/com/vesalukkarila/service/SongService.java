@@ -68,11 +68,27 @@ public class SongService {
         Object[] args = new Object[] {name, artist, publishYear, id};
         boolean success = this.jdbcTemplate.update(sql, args) == 1;
         if (!success){
-            throw new SongNotFoundException(id);
+            throw new SongNotFoundException(id);//TODO in controller use getsongbyid and give existing song to this method, refactor args and remove this block
         }
         Song song = new Song(name, artist, publishYear);
         song.setId(UUID.fromString(id));
         return song;
+    }
+
+    @Transactional
+    public Song patchSong(Song existingSong){
+        if (songExists(existingSong.getName(), existingSong.getArtist(), existingSong.getPublishYear())){
+            throw new SongAlreadyExistsException(existingSong.getName(), existingSong.getArtist(), existingSong.getPublishYear());
+        }
+        String sql = "UPDATE songs SET name = ?, artist = ?, publishYear = ? WHERE id = ?";
+        Object[] args = new Object[] {
+                existingSong.getName(),
+                existingSong.getArtist(),
+                existingSong.getPublishYear(),
+                existingSong.getId().toString()
+        };
+        this.jdbcTemplate.update(sql, args);
+        return existingSong;
     }
 
     @Transactional
