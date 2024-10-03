@@ -16,7 +16,7 @@ public class YearRangeValidator implements ConstraintValidator<YearRange, Intege
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
         if (value == null){
-            return true;
+            return false;
         }
         int currentYear = Year.now().getValue();
         return value >= 1889 && value <= currentYear;

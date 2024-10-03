@@ -3,6 +3,7 @@ package com.vesalukkarila.web.controller;
 import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
+import com.vesalukkarila.web.exception.InvalidUUIDException;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -41,16 +42,12 @@ public class SongsController {
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable("id") String uuidStr) {
-        try{
-            if (!isValidUUID(uuidStr)){
-                throw new IllegalArgumentException("Invalid UUID format: " + uuidStr);
-            }
-            Song song = songService.getSongById(uuidStr);
-            return ResponseEntity.ok(song);         //found?? as responsestatus
 
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(null);
+        if (!isValidUUID(uuidStr)) {
+            throw new InvalidUUIDException(uuidStr);
         }
+        Song song = songService.getSongById(uuidStr);
+        return ResponseEntity.ok(song);
     }
 
 

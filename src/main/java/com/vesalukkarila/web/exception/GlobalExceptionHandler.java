@@ -29,6 +29,16 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(InvalidUUIDException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidUUID(InvalidUUIDException ex){
+        Map<String, String> response = new HashMap<>();
+        response.put("error", ex.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid
             (MethodArgumentNotValidException ex){
