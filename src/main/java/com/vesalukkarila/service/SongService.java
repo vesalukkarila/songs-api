@@ -60,6 +60,22 @@ public class SongService {
     }
 
     @Transactional
+    public Song updateSong(String id, String name, String artist, Integer publishYear) {
+        if (songExists(name, artist, publishYear)){
+            throw new SongAlreadyExistsException(name, artist, publishYear);
+        }
+        String sql = "UPDATE songs SET name = ?, artist = ?, publishYear = ? WHERE id=?";
+        Object[] args = new Object[] {name, artist, publishYear, id};
+        boolean success = this.jdbcTemplate.update(sql, args) == 1;
+        if (!success){
+            throw new SongNotFoundException(id);
+        }
+        Song song = new Song(name, artist, publishYear);
+        song.setId(UUID.fromString(id));
+        return song;
+    }
+
+    @Transactional
     public void deleteSong(String id){
         String sql = "DELETE FROM songs WHERE id=?";
         Object[] args = new Object[] {id};
@@ -80,6 +96,7 @@ public class SongService {
         String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?, ?, ?, ?)";
         this.jdbcTemplate.update(sql, id.toString(), name, artist, publishYear);
     }
+
 
 
     private static class SongRowMapper implements RowMapper<Song> {
