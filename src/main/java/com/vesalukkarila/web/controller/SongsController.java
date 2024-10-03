@@ -33,12 +33,10 @@ public class SongsController {
         return response;
     }
 
-
     @GetMapping("/songs")
     public List<Song> getSongs() {
         return songService.getSongs();
     }
-
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable("id") String uuidStr) {
@@ -47,9 +45,9 @@ public class SongsController {
             throw new InvalidUUIDException(uuidStr);
         }
         Song song = songService.getSongById(uuidStr);
-        return ResponseEntity.ok(song);
-    }
 
+        return new ResponseEntity<>(song, HttpStatus.OK);
+    }
 
     @PostMapping("/songs")
     public ResponseEntity<Song> createSong(@RequestBody @Valid SongDto songDto) {
@@ -62,8 +60,19 @@ public class SongsController {
         return new ResponseEntity<>(song, headers, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/songs/{id}")
+    public ResponseEntity<Void> deleteSong(@PathVariable("id") String uuidStr){
+        if (!isValidUUID(uuidStr)){
+            throw new InvalidUUIDException(uuidStr);
+        }
+        this.songService.deleteSong(uuidStr);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
     private boolean isValidUUID(String uuidStr){
         String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
         return Pattern.matches(uuidRegex, uuidStr);
     }
+
+
 }

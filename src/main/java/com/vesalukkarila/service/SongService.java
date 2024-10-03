@@ -65,6 +65,15 @@ public class SongService {
         }
     }
 
+    @Transactional
+    public void deleteSong(String uuidStr){
+        String sql = "DELETE FROM songs WHERE id=?";
+        Object[] args = new Object[] {uuidStr};
+        boolean success = this.jdbcTemplate.update(sql, args) == 1;
+        if (!success){
+            throw new SongNotFoundException(uuidStr);
+        }
+    }
 
     private boolean songExists(String name, String artist, Integer publishYear){
         String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
