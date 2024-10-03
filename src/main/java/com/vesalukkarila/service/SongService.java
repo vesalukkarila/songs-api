@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,23 +30,18 @@ public class SongService {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    /*TODO: 1. later: create class that runs e.g. in "dev" mode and populates database with few Songs
-    *       2. consider: should in-memory db be cleared after n-inputs/on application shutdown/through endpoint*/
-    @PostConstruct
-    public void init() {
-        if (getSongs().isEmpty()){
-            createSong("Thunderstruck", "AC/DC", 1990);
-        }
-    }
-
-
+    @Transactional
     public List<Song> getSongs() {
+        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
+
         String sql = "SELECT id, name, artist, publishYear FROM songs";
         return jdbcTemplate.query(sql, songRowMapper);
     }
 
-
+    @Transactional
     public Song getSongById(String id) {
+        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
+
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
             return jdbcTemplate.queryForObject(sql, songRowMapper, id);
@@ -53,8 +50,10 @@ public class SongService {
         }
     }
 
-
+    @Transactional
     public Song createSong(String name, String artist, Integer publishYear) {
+        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
+
         if (songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name, artist, publishYear);
         }else {
