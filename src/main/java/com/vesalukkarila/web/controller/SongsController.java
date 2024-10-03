@@ -14,7 +14,6 @@ import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.regex.Pattern;
 
 @RestController
@@ -39,13 +38,11 @@ public class SongsController {
     }
 
     @GetMapping("/songs/{id}")
-    public ResponseEntity<Song> getSongById(@PathVariable("id") String uuidStr) {
-
-        if (!isValidUUID(uuidStr)) {
-            throw new InvalidUUIDException(uuidStr);
+    public ResponseEntity<Song> getSongById(@PathVariable("id") String id) {
+        if (notValidUUID(id)) {
+            throw new InvalidUUIDException(id);
         }
-        Song song = songService.getSongById(uuidStr);
-
+        Song song = songService.getSongById(id);
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
@@ -61,18 +58,16 @@ public class SongsController {
     }
 
     @DeleteMapping("/songs/{id}")
-    public ResponseEntity<Void> deleteSong(@PathVariable("id") String uuidStr){
-        if (!isValidUUID(uuidStr)){
-            throw new InvalidUUIDException(uuidStr);
+    public ResponseEntity<Void> deleteSong(@PathVariable("id") String id){
+        if (notValidUUID(id)){
+            throw new InvalidUUIDException(id);
         }
-        this.songService.deleteSong(uuidStr);
+        this.songService.deleteSong(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private boolean isValidUUID(String uuidStr){
+    private boolean notValidUUID(String id){
         String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-        return Pattern.matches(uuidRegex, uuidStr);
+        return !Pattern.matches(uuidRegex, id);
     }
-
-
 }

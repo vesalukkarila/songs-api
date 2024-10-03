@@ -32,16 +32,12 @@ public class SongService {
 
     @Transactional
     public List<Song> getSongs() {
-        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
-
         String sql = "SELECT id, name, artist, publishYear FROM songs";
         return jdbcTemplate.query(sql, songRowMapper);
     }
 
     @Transactional
     public Song getSongById(String id) {
-        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
-
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
             return jdbcTemplate.queryForObject(sql, songRowMapper, id);
@@ -52,8 +48,6 @@ public class SongService {
 
     @Transactional
     public Song createSong(String name, String artist, Integer publishYear) {
-        System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
-
         if (songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name, artist, publishYear);
         }else {
@@ -66,12 +60,12 @@ public class SongService {
     }
 
     @Transactional
-    public void deleteSong(String uuidStr){
+    public void deleteSong(String id){
         String sql = "DELETE FROM songs WHERE id=?";
-        Object[] args = new Object[] {uuidStr};
+        Object[] args = new Object[] {id};
         boolean success = this.jdbcTemplate.update(sql, args) == 1;
         if (!success){
-            throw new SongNotFoundException(uuidStr);
+            throw new SongNotFoundException(id);
         }
     }
 

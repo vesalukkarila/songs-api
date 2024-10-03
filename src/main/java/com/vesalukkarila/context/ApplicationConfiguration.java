@@ -24,7 +24,6 @@ public class ApplicationConfiguration {
         return new ObjectMapper();
     }
 
-    // TODO: later; find out how to allow multiple access to database simultaneously (properties?, through datasource(?))
     @Bean
     public JdbcDataSource jdbcDataSource() {
         JdbcDataSource dataSource = new JdbcDataSource();
