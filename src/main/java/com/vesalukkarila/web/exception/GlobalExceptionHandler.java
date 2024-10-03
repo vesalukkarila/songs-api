@@ -46,11 +46,18 @@ public class GlobalExceptionHandler {
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
-            String field = ((FieldError) error).getField();
+            String field;
+            if (error instanceof FieldError){
+                field = ((FieldError) error).getField();
+                if (field.equals("publishYear")){
+                    field = "publish_year";
+                }
+            }else {
+                field = error.getObjectName();
+            }
             String errorMessage = error.getDefaultMessage();
             errors.put(field, errorMessage);
         });
-
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
