@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,10 +18,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-@Component
+@Service
 public class SongService {
 
     private final JdbcTemplate jdbcTemplate;
+    private static final SongRowMapper songRowMapper = new SongRowMapper();
 
     public SongService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -38,14 +40,14 @@ public class SongService {
 
     public List<Song> getSongs() {
         String sql = "SELECT id, name, artist, publishYear FROM songs";
-        return jdbcTemplate.query(sql, new SongRowMapper());
+        return jdbcTemplate.query(sql, songRowMapper);
     }
 
 
     public Song getSongById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
-            return jdbcTemplate.queryForObject(sql, new SongRowMapper(), id);
+            return jdbcTemplate.queryForObject(sql, songRowMapper, id);
         }catch (Exception e){
             throw new SongNotFoundException(id);
         }
