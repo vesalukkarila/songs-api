@@ -41,9 +41,7 @@ public class SongsController {
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable("id") String id) {
-        if (notValidUUID(id)) {
-            throw new InvalidUUIDException(id);
-        }
+        validateUUID(id);
         Song song = songService.getSongById(id);
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
@@ -62,9 +60,7 @@ public class SongsController {
     @PutMapping("/songs/{id}")
     public ResponseEntity<Song> updateSong(@PathVariable("id") String id,
                                            @RequestBody @Validated(CreateOrPutGroup.class) SongDto songDto){
-        if (notValidUUID(id)){
-            throw new InvalidUUIDException(id);
-        }
+        validateUUID(id);
         Song song = this.songService.updateSong(id, songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
@@ -72,9 +68,7 @@ public class SongsController {
     @PatchMapping("/songs/{id}")
     public ResponseEntity<Song> patchSong(@PathVariable("id") String id,
                                           @RequestBody @Validated(PatchGroup.class) SongDto songDto){
-        if (notValidUUID(id)){
-            throw new InvalidUUIDException(id);
-        }
+        validateUUID(id);
         Song existingSong = this.songService.getSongById(id);
         existingSong = songDto.updateFields(existingSong);
         Song updatedSong = this.songService.patchSong(existingSong);
@@ -84,15 +78,15 @@ public class SongsController {
 
     @DeleteMapping("/songs/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable("id") String id){
-        if (notValidUUID(id)){
-            throw new InvalidUUIDException(id);
-        }
+        validateUUID(id);
         this.songService.deleteSong(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private boolean notValidUUID(String id){
+    private void validateUUID(String id){
         String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
-        return !Pattern.matches(uuidRegex, id);
+        if(!Pattern.matches(uuidRegex, id)){
+            throw new InvalidUUIDException(id);
+        }
     }
 }
