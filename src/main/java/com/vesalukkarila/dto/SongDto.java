@@ -1,16 +1,23 @@
 package com.vesalukkarila.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vesalukkarila.model.Song;
+import com.vesalukkarila.web.validation.CreateOrPutGroup;
+import com.vesalukkarila.web.validation.PatchGroup;
 import com.vesalukkarila.web.validation.YearRange;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
+
 
 public class SongDto {
-    @NotBlank
+    @NotBlank(groups = CreateOrPutGroup.class)
+    @Size(min = 1, groups = PatchGroup.class, message = "Name must not be blank when provided")
     private String name;
-    @NotBlank
+    @NotBlank(groups = CreateOrPutGroup.class)
+    @Size(min = 1, groups = PatchGroup.class, message = "Artist must not be blank when provided")
     private String artist;
     @JsonProperty("publish_year")
-    @YearRange
+    @NotNull(groups = CreateOrPutGroup.class)
+    @YearRange(groups = {CreateOrPutGroup.class, PatchGroup.class})
     private Integer publishYear;
 
     public String getName() {
@@ -37,5 +44,18 @@ public class SongDto {
 
     public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
+    }
+
+    public Song updateFields(Song existingSong) {
+        if (this.getName() != null){
+            existingSong.setName(this.getName());
+        }
+        if (this.getArtist() != null){
+            existingSong.setArtist(this.getArtist());
+        }
+        if (this.getPublishYear() != null){
+            existingSong.setPublishYear(this.getPublishYear());
+        }
+        return existingSong;
     }
 }

@@ -1,14 +1,15 @@
 package com.vesalukkarila.web.controller;
 
 import com.vesalukkarila.dto.SongDto;
-import com.vesalukkarila.dto.SongPatchDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
 import com.vesalukkarila.web.exception.InvalidUUIDException;
-import jakarta.validation.Valid;
+import com.vesalukkarila.web.validation.CreateOrPutGroup;
+import com.vesalukkarila.web.validation.PatchGroup;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -48,7 +49,7 @@ public class SongsController {
     }
 
     @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody @Valid SongDto songDto) {
+    public ResponseEntity<Song> createSong(@RequestBody @Validated(CreateOrPutGroup.class) SongDto songDto) {
         Song song = songService.createSong(
                 songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
 
@@ -60,7 +61,7 @@ public class SongsController {
 
     @PutMapping("/songs/{id}")
     public ResponseEntity<Song> updateSong(@PathVariable("id") String id,
-                                           @RequestBody @Valid SongDto songDto){
+                                           @RequestBody @Validated(CreateOrPutGroup.class) SongDto songDto){
         if (notValidUUID(id)){
             throw new InvalidUUIDException(id);
         }
@@ -70,12 +71,12 @@ public class SongsController {
 
     @PatchMapping("/songs/{id}")
     public ResponseEntity<Song> patchSong(@PathVariable("id") String id,
-                                          @RequestBody SongPatchDto songPatchDto){
+                                          @RequestBody @Validated(PatchGroup.class) SongDto songDto){
         if (notValidUUID(id)){
             throw new InvalidUUIDException(id);
         }
         Song existingSong = this.songService.getSongById(id);
-        existingSong = songPatchDto.updateFields(existingSong);
+        existingSong = songDto.updateFields(existingSong);
         Song updatedSong = this.songService.patchSong(existingSong);
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);
 
