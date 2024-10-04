@@ -44,6 +44,13 @@ public class SongRepository implements ISongRepository{
         this.jdbcTemplate.update(sql, args);
     }
 
+    @Override
+    public void update(Song song) {
+        String sql = "UPDATE songs SET name = ?, artist = ?, publishYear = ? WHERE id=?";
+        Object[] args = new Object[] {song.getName(), song.getArtist(), song.getPublishYear(), song.getId().toString()};
+        this.jdbcTemplate.update(sql, args);
+    }
+
 
     public boolean songExists(String name, String artist, Integer publishYear){
         String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";

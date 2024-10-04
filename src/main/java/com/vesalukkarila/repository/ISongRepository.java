@@ -8,4 +8,5 @@ public interface ISongRepository {
     List<Song> findAll();
     Song findById(String id);
     void save(Song song);
+    void update(Song song);
 }
