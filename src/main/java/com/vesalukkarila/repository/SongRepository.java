@@ -51,6 +51,13 @@ public class SongRepository implements ISongRepository{
         this.jdbcTemplate.update(sql, args);
     }
 
+    @Override
+    public boolean delete(String id) {
+        String sql = "DELETE FROM songs WHERE id=?";
+        Object[] args = new Object[] {id};
+        return this.jdbcTemplate.update(sql, args) == 1;
+    }
+
 
     public boolean songExists(String name, String artist, Integer publishYear){
         String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";

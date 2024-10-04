@@ -9,4 +9,5 @@ public interface ISongRepository {
     Song findById(String id);
     void save(Song song);
     void update(Song song);
+    boolean delete(String id);
 }

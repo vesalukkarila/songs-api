@@ -55,6 +55,7 @@ public class SongService {
         return song;
     }
 
+    // TODO: refactor controller method and this here so the same method in repository can be used if possible
     @Transactional
     public Song patchSong(Song existingSong){
         if (songExists(existingSong.getName(), existingSong.getArtist(), existingSong.getPublishYear())){
@@ -73,10 +74,7 @@ public class SongService {
 
     @Transactional
     public void deleteSong(String id){
-        String sql = "DELETE FROM songs WHERE id=?";
-        Object[] args = new Object[] {id};
-        boolean success = this.jdbcTemplate.update(sql, args) == 1;
-        if (!success){
+        if (!this.songRepository.delete(id)){
             throw new SongNotFoundException(id);
         }
     }
