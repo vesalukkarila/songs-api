@@ -80,8 +80,9 @@ public class SongsController {
                                           @Validated(PatchGroup.class)
                                           SongDto songDto){
         validateUUID(id);
+        //TODO: a bit funky solution here, should song be updated with fields found on dto instead
         Song existingSong = this.songService.findById(id);
-        existingSong = songDto.updateFields(existingSong);
+        existingSong.updateFields(songDto);
         Song updatedSong = this.songService.patchSong(existingSong);
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);
 

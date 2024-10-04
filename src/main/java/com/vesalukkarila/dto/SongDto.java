@@ -49,18 +49,4 @@ public class SongDto {
     public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
     }
-
-
-    public Song updateFields(Song existingSong) {
-        if (this.getName() != null){
-            existingSong.setName(this.getName());
-        }
-        if (this.getArtist() != null){
-            existingSong.setArtist(this.getArtist());
-        }
-        if (this.getPublishYear() != null){
-            existingSong.setPublishYear(this.getPublishYear());
-        }
-        return existingSong;
-    }
 }
