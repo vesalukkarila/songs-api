@@ -21,49 +21,59 @@ public class SongRepository implements ISongRepository{
         this.jdbcTemplate = jdbcTemplate;
     }
 
+
     @Override
     public List<Song> findAll() {
         String sql = "SELECT id, name, artist, publishYear FROM songs";
-        return this.jdbcTemplate.query(sql, songRowMapper);
+        return jdbcTemplate.query(sql, songRowMapper);
     }
+
 
     @Override
     public Song findById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
-            return this.jdbcTemplate.queryForObject(sql, songRowMapper, id);
+            return jdbcTemplate.queryForObject(sql, songRowMapper, id);
         }catch (Exception e){
             throw new SongNotFoundException(id);
         }
     }
 
+
     @Override
     public void save(Song song) {
         String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?,?,?,?)";
-        Object[] args = new Object[]{song.getId().toString(), song.getName(), song.getArtist(), song.getPublishYear()};
-        this.jdbcTemplate.update(sql, args);
+        Object[] args = new Object[]{song.getId().toString(), song.getName(),
+                song.getArtist(), song.getPublishYear()};
+        jdbcTemplate.update(sql, args);
     }
+
 
     @Override
     public void update(Song song) {
         String sql = "UPDATE songs SET name = ?, artist = ?, publishYear = ? WHERE id=?";
-        Object[] args = new Object[] {song.getName(), song.getArtist(), song.getPublishYear(), song.getId().toString()};
-        this.jdbcTemplate.update(sql, args);
+        Object[] args = new Object[] {song.getName(), song.getArtist(),
+                song.getPublishYear(), song.getId().toString()};
+        jdbcTemplate.update(sql, args);
     }
+
 
     @Override
     public boolean delete(String id) {
         String sql = "DELETE FROM songs WHERE id=?";
         Object[] args = new Object[] {id};
-        return this.jdbcTemplate.update(sql, args) == 1;
+        return jdbcTemplate.update(sql, args) == 1;
     }
 
 
     public boolean songExists(String name, String artist, Integer publishYear){
-        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
+        String sql = "SELECT COUNT(*) " +
+                "FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
+        Integer count = jdbcTemplate.queryForObject(
+                sql, Integer.class, name, artist, publishYear);
         return count != null && count > 0;
     }
+
 
     private static class SongRowMapper implements RowMapper<Song> {
         @Override

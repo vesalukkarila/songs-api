@@ -1,9 +1,7 @@
 package com.vesalukkarila.model;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vesalukkarila.dto.SongDto;
-
 import java.util.UUID;
 
 public class Song {
@@ -27,33 +25,41 @@ public class Song {
         this.id = id;
     }
 
+
     public void setName(String name) {
         this.name = name;
     }
+
 
     public void setArtist(String artist) {
         this.artist = artist;
     }
 
+
     public void setPublishYear(Integer publishYear) {
         this.publishYear = publishYear;
     }
+
 
     public UUID getId() {
         return id;
     }
 
+
     public String getName() {
         return name;
     }
+
 
     public String getArtist() {
         return artist;
     }
 
+
     public Integer getPublishYear() {
         return publishYear;
     }
+
 
     public void updateFields(SongDto songDto){
         if (songDto.getName() != null && !songDto.getName().isBlank()){
@@ -65,7 +71,6 @@ public class Song {
         if (songDto.getPublishYear() != null){
             this.publishYear = songDto.getPublishYear();
         }
-
     }
 
 }

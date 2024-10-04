@@ -23,13 +23,13 @@ public class SongsController {
 
     private final SongService songService;
 
-    public SongsController(SongService songService) {
+    public SongsController(SongService songService){
         this.songService = songService;
     }
 
 
     @GetMapping("/")
-    public Map<String, String> greeting() {
+    public Map<String, String> greeting(){
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello from Songs API");
         return response;
@@ -37,13 +37,13 @@ public class SongsController {
 
 
     @GetMapping("/songs")
-    public List<Song> getSongs() {
+    public List<Song> getSongs(){
         return songService.findAll();
     }
 
 
     @GetMapping("/songs/{id}")
-    public ResponseEntity<Song> getSongById(@PathVariable("id") String id) {
+    public ResponseEntity<Song> getSongById(@PathVariable("id") String id){
         validateUUID(id);
         Song song = songService.findById(id);
         return new ResponseEntity<>(song, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class SongsController {
     @PostMapping("/songs")
     public ResponseEntity<Song> createSong(@RequestBody
                                                @Validated(CreateOrPutGroup.class)
-                                               SongDto songDto) {
+                                               SongDto songDto){
         Song song = songService.createSong(songDto.getName(),
                 songDto.getArtist(), songDto.getPublishYear());
         HttpHeaders headers = new HttpHeaders();
@@ -68,7 +68,7 @@ public class SongsController {
                                            @Validated(CreateOrPutGroup.class)
                                            SongDto songDto){
         validateUUID(id);
-        Song song = this.songService.updateSong(id, songDto.getName(),
+        Song song = songService.updateSong(id, songDto.getName(),
                 songDto.getArtist(), songDto.getPublishYear());
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
@@ -80,9 +80,9 @@ public class SongsController {
                                           @Validated(PatchGroup.class)
                                           SongDto songDto){
         validateUUID(id);
-        Song song = this.songService.findById(id);
+        Song song = songService.findById(id);
         song.updateFields(songDto);
-        Song updatedSong = this.songService.patchSong(
+        Song updatedSong = songService.patchSong(
                 id, song.getName(), song.getArtist(), song.getPublishYear());
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);
     }
@@ -91,7 +91,7 @@ public class SongsController {
     @DeleteMapping("/songs/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable("id") String id){
         validateUUID(id);
-        this.songService.deleteSong(id);
+        songService.deleteSong(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

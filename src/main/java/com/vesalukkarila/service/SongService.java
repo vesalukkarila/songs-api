@@ -16,73 +16,62 @@ import java.util.UUID;
 public class SongService {
     private final SongRepository songRepository;
 
-    public SongService(JdbcTemplate jdbcTemplate, SongRepository songRepository) {
+    public SongService(SongRepository songRepository){
         this.songRepository = songRepository;
     }
 
     @Transactional
     public List<Song> findAll() {
-        return this.songRepository.findAll();
+        return songRepository.findAll();
     }
+
 
     @Transactional
     public Song findById(String id) {
-        return this.songRepository.findById(id);
+        return songRepository.findById(id);
     }
 
+
     @Transactional
-    public Song createSong(String name, String artist, Integer publishYear) {
-        if (this.songRepository.songExists(name, artist, publishYear)){
+    public Song createSong(String name, String artist, Integer publishYear){
+        if (songRepository.songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name,artist,publishYear);
         }
         Song song = new Song(name, artist, publishYear);
         song.setId(UUID.randomUUID());
-        this.songRepository.save(song);
+        songRepository.save(song);
         return song;
     }
 
 
     @Transactional
-    public Song updateSong(String id, String name, String artist, Integer publishYear) {
-        if (this.songRepository.songExists(name, artist, publishYear)){
+    public Song updateSong(String id, String name, String artist, Integer publishYear){
+        if (songRepository.songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name, artist, publishYear);
         }
         Song song = new Song(name, artist, publishYear);
         song.setId(UUID.fromString(id));
-        this.songRepository.update(song);
+        songRepository.update(song);
         return song;
     }
+
 
     @Transactional
     public Song patchSong(String id, String name, String artist, Integer publishYear){
-        if (this.songRepository.songExists(name, artist, publishYear)){
+        if (songRepository.songExists(name, artist, publishYear)){
             throw new SongAlreadyExistsException(name, artist, publishYear);
         }
         Song song = new Song(name, artist, publishYear);
         song.setId(UUID.fromString(id));
-        this.songRepository.update(song);
+        songRepository.update(song);
         return song;
     }
 
+
     @Transactional
     public void deleteSong(String id){
-        if (!this.songRepository.delete(id)){
+        if (!songRepository.delete(id)){
             throw new SongNotFoundException(id);
         }
     }
-
-//    private boolean songExists(String name, String artist, Integer publishYear){
-//        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
-//        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
-//        return count != null && count > 0;
-//    }
-
-
-//    private void insertSongIntoDatabase(UUID id, String name, String artist, Integer publishYear) {
-//        String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?, ?, ?, ?)";
-//        this.jdbcTemplate.update(sql, id.toString(), name, artist, publishYear);
-//    }
-
-
-
 }

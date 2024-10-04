@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.time.Year;
 
-public class YearRangeValidator implements ConstraintValidator<YearRange, Integer> {
+public class YearRangeValidator implements ConstraintValidator<YearRange, Integer>{
 
     @Override
     public void initialize(YearRange constraintAnnotation) {
@@ -14,7 +14,7 @@ public class YearRangeValidator implements ConstraintValidator<YearRange, Intege
 
 
     @Override
-    public boolean isValid(Integer value, ConstraintValidatorContext context) {
+    public boolean isValid(Integer value, ConstraintValidatorContext context){
         if (value == null){
             return true;
         }

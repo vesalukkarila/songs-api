@@ -12,7 +12,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 public class ApplicationLauncher {
 
-    public static void main(String[] args) throws LifecycleException {
+    public static void main(String[] args) throws LifecycleException{
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8080);
         tomcat.getConnector();
@@ -29,7 +29,7 @@ public class ApplicationLauncher {
         tomcat.start();
     }
 
-    private static WebApplicationContext createApplicationContext(ServletContext servletContext) {
+    private static WebApplicationContext createApplicationContext(ServletContext servletContext){
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(ApplicationConfiguration.class);
         ctx.setServletContext(servletContext);

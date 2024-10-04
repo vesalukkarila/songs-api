@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -27,7 +26,8 @@ public class ApplicationConfiguration {
     @Bean
     public JdbcDataSource jdbcDataSource() {
         JdbcDataSource dataSource = new JdbcDataSource();
-        dataSource.setURL("jdbc:h2:~/songsH2Database;INIT=RUNSCRIPT FROM 'classpath:schema.sql' ");
+        dataSource.setURL("jdbc:h2:~/songsH2Database;" +
+                "INIT=RUNSCRIPT FROM 'classpath:schema.sql' ");
         dataSource.setUser("sa"); // sa&sa somewhat a convention with H2
         dataSource.setPassword("sa");
         return dataSource;

@@ -13,6 +13,7 @@ public class SongInitializer implements ApplicationListener<ContextRefreshedEven
         this.songService = songService;
     }
 
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (songService.findAll().isEmpty()) {

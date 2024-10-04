@@ -1,7 +1,6 @@
 package com.vesalukkarila.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vesalukkarila.model.Song;
 import com.vesalukkarila.web.validation.CreateOrPutGroup;
 import com.vesalukkarila.web.validation.PatchGroup;
 import com.vesalukkarila.web.validation.YearRange;
