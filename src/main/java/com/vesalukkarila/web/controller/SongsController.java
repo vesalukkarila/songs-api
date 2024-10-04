@@ -38,14 +38,14 @@ public class SongsController {
 
     @GetMapping("/songs")
     public List<Song> getSongs() {
-        return songService.getSongs();
+        return songService.findAll();
     }
 
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable("id") String id) {
         validateUUID(id);
-        Song song = songService.getSongById(id);
+        Song song = songService.findById(id);
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
@@ -80,7 +80,7 @@ public class SongsController {
                                           @Validated(PatchGroup.class)
                                           SongDto songDto){
         validateUUID(id);
-        Song existingSong = this.songService.getSongById(id);
+        Song existingSong = this.songService.findById(id);
         existingSong = songDto.updateFields(existingSong);
         Song updatedSong = this.songService.patchSong(existingSong);
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);

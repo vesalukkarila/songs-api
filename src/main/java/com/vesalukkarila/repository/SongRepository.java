@@ -1,6 +1,7 @@
 package com.vesalukkarila.repository;
 
 import com.vesalukkarila.model.Song;
+import com.vesalukkarila.web.exception.SongNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -24,6 +25,16 @@ public class SongRepository implements ISongRepository{
     public List<Song> findAll() {
         String sql = "SELECT id, name, artist, publishYear FROM songs";
         return jdbcTemplate.query(sql, songRowMapper);
+    }
+
+    @Override
+    public Song findById(String id) {
+        String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
+        try {
+            return jdbcTemplate.queryForObject(sql, songRowMapper, id);
+        }catch (Exception e){
+            throw new SongNotFoundException(id);
+        }
     }
 
     private static class SongRowMapper implements RowMapper<Song> {

@@ -15,7 +15,7 @@ public class SongInitializer implements ApplicationListener<ContextRefreshedEven
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if (songService.getSongs().isEmpty()) {
+        if (songService.findAll().isEmpty()) {
             songService.createSong("Thunderstruck", "AC/DC", 1990);
         }
     }

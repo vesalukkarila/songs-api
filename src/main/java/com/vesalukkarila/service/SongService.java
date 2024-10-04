@@ -5,13 +5,10 @@ import com.vesalukkarila.repository.SongRepository;
 import com.vesalukkarila.web.exception.SongAlreadyExistsException;
 import com.vesalukkarila.web.exception.SongNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +16,6 @@ import java.util.UUID;
 public class SongService {
 
     private final JdbcTemplate jdbcTemplate;
-    private static final SongRowMapper songRowMapper = new SongRowMapper();
     private final SongRepository songRepository;
     public SongService(JdbcTemplate jdbcTemplate, SongRepository songRepository) {
         this.jdbcTemplate = jdbcTemplate;
@@ -27,18 +23,13 @@ public class SongService {
     }
 
     @Transactional
-    public List<Song> getSongs() {
+    public List<Song> findAll() {
         return this.songRepository.findAll();
     }
 
     @Transactional
-    public Song getSongById(String id) {
-        String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
-        try {
-            return jdbcTemplate.queryForObject(sql, songRowMapper, id);
-        }catch (Exception e){
-            throw new SongNotFoundException(id);
-        }
+    public Song findById(String id) {
+        return this.songRepository.findById(id);
     }
 
     @Transactional
@@ -110,15 +101,4 @@ public class SongService {
 
 
 
-    private static class SongRowMapper implements RowMapper<Song> {
-        @Override
-        public Song mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Song song = new Song();
-            song.setId(UUID.fromString(rs.getString("id")));
-            song.setName(rs.getString("name"));
-            song.setArtist(rs.getString("artist"));
-            song.setPublishYear(rs.getInt("publishYear"));
-            return song;
-        }
-    }
 }
