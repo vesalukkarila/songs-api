@@ -34,16 +34,15 @@ public class SongService {
 
     @Transactional
     public Song createSong(String name, String artist, Integer publishYear) {
-        if (songExists(name, artist, publishYear)){
-            throw new SongAlreadyExistsException(name, artist, publishYear);
-        }else {
-            UUID id = UUID.randomUUID();
-            insertSongIntoDatabase(id, name, artist, publishYear);
-            Song song = new Song(name, artist, publishYear);
-            song.setId(id);
-            return song;
+        if (this.songRepository.songExists(name, artist, publishYear)){
+            throw new SongAlreadyExistsException(name,artist,publishYear);
         }
+        Song song = new Song(name, artist, publishYear);
+        song.setId(UUID.randomUUID());
+        this.songRepository.save(song);
+        return song;
     }
+
 
     @Transactional
     public Song updateSong(String id, String name, String artist, Integer publishYear) {
@@ -94,10 +93,10 @@ public class SongService {
     }
 
 
-    private void insertSongIntoDatabase(UUID id, String name, String artist, Integer publishYear) {
-        String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?, ?, ?, ?)";
-        this.jdbcTemplate.update(sql, id.toString(), name, artist, publishYear);
-    }
+//    private void insertSongIntoDatabase(UUID id, String name, String artist, Integer publishYear) {
+//        String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?, ?, ?, ?)";
+//        this.jdbcTemplate.update(sql, id.toString(), name, artist, publishYear);
+//    }
 
 
 

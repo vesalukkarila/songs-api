@@ -24,17 +24,31 @@ public class SongRepository implements ISongRepository{
     @Override
     public List<Song> findAll() {
         String sql = "SELECT id, name, artist, publishYear FROM songs";
-        return jdbcTemplate.query(sql, songRowMapper);
+        return this.jdbcTemplate.query(sql, songRowMapper);
     }
 
     @Override
     public Song findById(String id) {
         String sql = "SELECT id, name, artist, publishYear FROM songs where id=?";
         try {
-            return jdbcTemplate.queryForObject(sql, songRowMapper, id);
+            return this.jdbcTemplate.queryForObject(sql, songRowMapper, id);
         }catch (Exception e){
             throw new SongNotFoundException(id);
         }
+    }
+
+    @Override
+    public void save(Song song) {
+        String sql = "INSERT INTO songs (id, name, artist, publishYear) VALUES (?,?,?,?)";
+        Object[] args = new Object[]{song.getId().toString(), song.getName(), song.getArtist(), song.getPublishYear()};
+        this.jdbcTemplate.update(sql, args);
+    }
+
+
+    public boolean songExists(String name, String artist, Integer publishYear){
+        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
+        return count != null && count > 0;
     }
 
     private static class SongRowMapper implements RowMapper<Song> {
