@@ -14,11 +14,9 @@ import java.util.UUID;
 
 @Service
 public class SongService {
-
-    private final JdbcTemplate jdbcTemplate;
     private final SongRepository songRepository;
+
     public SongService(JdbcTemplate jdbcTemplate, SongRepository songRepository) {
-        this.jdbcTemplate = jdbcTemplate;
         this.songRepository = songRepository;
     }
 
@@ -55,21 +53,15 @@ public class SongService {
         return song;
     }
 
-    // TODO: refactor controller method and this here so the same method in repository can be used if possible
     @Transactional
-    public Song patchSong(Song existingSong){
-        if (songExists(existingSong.getName(), existingSong.getArtist(), existingSong.getPublishYear())){
-            throw new SongAlreadyExistsException(existingSong.getName(), existingSong.getArtist(), existingSong.getPublishYear());
+    public Song patchSong(String id, String name, String artist, Integer publishYear){
+        if (this.songRepository.songExists(name, artist, publishYear)){
+            throw new SongAlreadyExistsException(name, artist, publishYear);
         }
-        String sql = "UPDATE songs SET name = ?, artist = ?, publishYear = ? WHERE id = ?";
-        Object[] args = new Object[] {
-                existingSong.getName(),
-                existingSong.getArtist(),
-                existingSong.getPublishYear(),
-                existingSong.getId().toString()
-        };
-        this.jdbcTemplate.update(sql, args);
-        return existingSong;
+        Song song = new Song(name, artist, publishYear);
+        song.setId(UUID.fromString(id));
+        this.songRepository.update(song);
+        return song;
     }
 
     @Transactional
@@ -79,11 +71,11 @@ public class SongService {
         }
     }
 
-    private boolean songExists(String name, String artist, Integer publishYear){
-        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
-        return count != null && count > 0;
-    }
+//    private boolean songExists(String name, String artist, Integer publishYear){
+//        String sql = "SELECT COUNT(*) FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
+//        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, artist, publishYear);
+//        return count != null && count > 0;
+//    }
 
 
 //    private void insertSongIntoDatabase(UUID id, String name, String artist, Integer publishYear) {
