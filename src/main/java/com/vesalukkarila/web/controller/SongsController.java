@@ -27,6 +27,7 @@ public class SongsController {
         this.songService = songService;
     }
 
+
     @GetMapping("/")
     public Map<String, String> greeting() {
         Map<String, String> response = new HashMap<>();
@@ -34,10 +35,12 @@ public class SongsController {
         return response;
     }
 
+
     @GetMapping("/songs")
     public List<Song> getSongs() {
         return songService.getSongs();
     }
+
 
     @GetMapping("/songs/{id}")
     public ResponseEntity<Song> getSongById(@PathVariable("id") String id) {
@@ -46,28 +49,36 @@ public class SongsController {
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
-    @PostMapping("/songs")
-    public ResponseEntity<Song> createSong(@RequestBody @Validated(CreateOrPutGroup.class) SongDto songDto) {
-        Song song = songService.createSong(
-                songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
 
+    @PostMapping("/songs")
+    public ResponseEntity<Song> createSong(@RequestBody
+                                               @Validated(CreateOrPutGroup.class)
+                                               SongDto songDto) {
+        Song song = songService.createSong(songDto.getName(),
+                songDto.getArtist(), songDto.getPublishYear());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/songs/" + song.getId()));
-
         return new ResponseEntity<>(song, headers, HttpStatus.CREATED);
     }
 
+
     @PutMapping("/songs/{id}")
     public ResponseEntity<Song> updateSong(@PathVariable("id") String id,
-                                           @RequestBody @Validated(CreateOrPutGroup.class) SongDto songDto){
+                                           @RequestBody
+                                           @Validated(CreateOrPutGroup.class)
+                                           SongDto songDto){
         validateUUID(id);
-        Song song = this.songService.updateSong(id, songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
+        Song song = this.songService.updateSong(id, songDto.getName(),
+                songDto.getArtist(), songDto.getPublishYear());
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
+
     @PatchMapping("/songs/{id}")
     public ResponseEntity<Song> patchSong(@PathVariable("id") String id,
-                                          @RequestBody @Validated(PatchGroup.class) SongDto songDto){
+                                          @RequestBody
+                                          @Validated(PatchGroup.class)
+                                          SongDto songDto){
         validateUUID(id);
         Song existingSong = this.songService.getSongById(id);
         existingSong = songDto.updateFields(existingSong);
@@ -76,6 +87,7 @@ public class SongsController {
 
     }
 
+
     @DeleteMapping("/songs/{id}")
     public ResponseEntity<Void> deleteSong(@PathVariable("id") String id){
         validateUUID(id);
@@ -83,8 +95,10 @@ public class SongsController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+
     private void validateUUID(String id){
-        String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
+        String uuidRegex = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-" +
+                "[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$";
         if(!Pattern.matches(uuidRegex, id)){
             throw new InvalidUUIDException(id);
         }

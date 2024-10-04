@@ -68,7 +68,7 @@ public class SongService {
         Object[] args = new Object[] {name, artist, publishYear, id};
         boolean success = this.jdbcTemplate.update(sql, args) == 1;
         if (!success){
-            throw new SongNotFoundException(id);//TODO in controller use getsongbyid and give existing song to this method, refactor args and remove this block
+            throw new SongNotFoundException(id);
         }
         Song song = new Song(name, artist, publishYear);
         song.setId(UUID.fromString(id));

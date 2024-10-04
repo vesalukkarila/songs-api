@@ -37,8 +37,6 @@ public class GlobalExceptionHandler {
     }
 
 
-
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid
             (MethodArgumentNotValidException ex){

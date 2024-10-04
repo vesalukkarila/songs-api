@@ -16,7 +16,7 @@ public class YearRangeValidator implements ConstraintValidator<YearRange, Intege
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
         if (value == null){
-            return true;    //allows null for patch, null values for create and put methods are validated using spring's validation groups @NotNull
+            return true;
         }
         int currentYear = Year.now().getValue();
         return value >= 1889 && value <= currentYear;
