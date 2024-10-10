@@ -2,13 +2,14 @@ package com.vesalukkarila.web.controller;
 
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
+import com.vesalukkarila.web.exception.InvalidUUIDException;
+import com.vesalukkarila.web.exception.SongNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -75,6 +76,49 @@ public class SongControllerTest {
             assertEquals(1936, response.get(1).getPublishYear());
         }
     }
+
+    @Nested
+    public class GetSongByIdTests {
+
+        @Test
+        public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
+            assertThrows(InvalidUUIDException.class,
+                    () ->songsController.getSongById("12345678-1234-1234-1234-incorrect"));
+        }
+
+        @Test
+        public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
+            String nonExistentId = "12345678-1324-1234-1234-12345678af12";
+            when(songService.findById(nonExistentId)).thenThrow(SongNotFoundException.class);
+            assertThrows(SongNotFoundException.class,
+                    () -> songsController.getSongById(nonExistentId));
+        }
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
