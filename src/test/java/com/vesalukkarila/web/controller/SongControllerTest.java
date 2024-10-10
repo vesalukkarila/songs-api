@@ -30,16 +30,17 @@ public class SongControllerTest {
     }
 
     @Test
-    public void testGreeting(){
+    public void shouldReturnGreetingMessage(){
         Map<String, String> response= songsController.greeting();
+        assertNotNull(response);
         assertEquals(response.get("message"), "Hello from Songs API");
     }
 
     @Nested
-    public class testGetSongs{
+    public class GetSongsTests{
 
         @Test
-        public void testWithZeroSongs(){
+        public void shouldReturnEmptyListWhenNoSongsAvailable(){
             List<Song> songs = new ArrayList<>();
             when(songService.findAll()).thenReturn(songs);
             List<Song> response = songsController.getSongs();
@@ -47,17 +48,19 @@ public class SongControllerTest {
         }
 
         @Test
-        public void testWithOneSong(){
+        public void shouldReturnOneSongWhenOneSongAvailable(){
             List<Song> songs = List.of(
                     new Song("The Thrill Is Gone", "B.B. King", 1969));
             when(songService.findAll()).thenReturn(songs);
             List<Song> response = songsController.getSongs();
             assertEquals(1, response.size());
             assertEquals("The Thrill Is Gone", response.get(0).getName());
+            assertEquals("B.B. King", response.get(0).getArtist());
+            assertEquals(1969, response.get(0).getPublishYear());
         }
 
         @Test
-        public void testWithTwoSongs(){
+        public void shouldReturnTwoSongsWhenTwoSongsAvailable(){
             List<Song> songs = Arrays.asList(
                     new Song("The Thrill Is Gone", "B.B. King", 1969),
                     new Song("Sweet Home Chicago", "Robert Johnson", 1936));
@@ -65,7 +68,13 @@ public class SongControllerTest {
             List<Song> response = songsController.getSongs();
             assertEquals(2, response.size());
             assertEquals("The Thrill Is Gone", response.get(0).getName());
+            assertEquals("B.B. King", response.get(0).getArtist());
+            assertEquals(1969, response.get(0).getPublishYear());
             assertEquals("Sweet Home Chicago", response.get(1).getName());
+            assertEquals("Robert Johnson", response.get(1).getArtist());
+            assertEquals(1936, response.get(1).getPublishYear());
         }
     }
+
+
 }
