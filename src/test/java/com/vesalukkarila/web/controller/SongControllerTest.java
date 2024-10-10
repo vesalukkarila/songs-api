@@ -94,7 +94,12 @@ public class SongControllerTest {
                     () -> songsController.getSongById(nonExistentId));
         }
 
+        //TODO: with existing id
     }
+    /*  TODO: POST method
+        TODO: PUT method
+        TODO:PATCH method
+     */
 
 
 
