@@ -28,7 +28,7 @@ public class ApplicationConfiguration {
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL("jdbc:h2:~/songsH2Database;" +
                 "INIT=RUNSCRIPT FROM 'classpath:schema.sql' ");
-        dataSource.setUser("sa"); // sa&sa somewhat a convention with H2
+        dataSource.setUser("sa");
         dataSource.setPassword("sa");
         return dataSource;
     }

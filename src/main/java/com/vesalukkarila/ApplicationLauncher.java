@@ -16,7 +16,7 @@ public class ApplicationLauncher {
         Tomcat tomcat = new Tomcat();
         tomcat.setPort(8080);
         tomcat.getConnector();
-        Context tomcatCtx = tomcat.addContext("", null);// only 1 application
+        Context tomcatCtx = tomcat.addContext("", null);
 
         WebApplicationContext appCtx = createApplicationContext(tomcatCtx.getServletContext());
 
