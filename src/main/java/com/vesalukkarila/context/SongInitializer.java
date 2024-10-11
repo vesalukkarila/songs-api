@@ -1,5 +1,6 @@
 package com.vesalukkarila.context;
 
+import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.service.SongService;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -17,7 +18,8 @@ public class SongInitializer implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (songService.findAll().isEmpty()) {
-            songService.createSong("Thunderstruck", "AC/DC", 1990);
+            SongDto songDto = new SongDto("Thunderstruck", "AC/DC", 1990);
+            songService.createSong(songDto);
         }
     }
 }

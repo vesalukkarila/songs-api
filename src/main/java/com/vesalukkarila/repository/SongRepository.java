@@ -1,5 +1,6 @@
 package com.vesalukkarila.repository;
 
+import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.web.exception.SongNotFoundException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -66,11 +67,11 @@ public class SongRepository implements ISongRepository{
     }
 
 
-    public boolean songExists(String name, String artist, Integer publishYear){
+    public boolean songExists(SongDto songDto){
         String sql = "SELECT COUNT(*) " +
                 "FROM songs WHERE name = ? AND artist = ? AND publishYear = ?";
-        Integer count = jdbcTemplate.queryForObject(
-                sql, Integer.class, name, artist, publishYear);
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,
+                songDto.getName(), songDto.getArtist(), songDto.getPublishYear());
         return count != null && count > 0;
     }
 

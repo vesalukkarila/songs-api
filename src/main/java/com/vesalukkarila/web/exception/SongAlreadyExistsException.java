@@ -1,8 +1,11 @@
 package com.vesalukkarila.web.exception;
 
+import com.vesalukkarila.dto.SongDto;
+
 public class SongAlreadyExistsException extends RuntimeException{
-    public SongAlreadyExistsException(String name, String artist, Integer publishYear){
-        super("Song with name: " + name + ", artist: "
-                + artist + " and publishYear: " + publishYear + " already exists.");
+    public SongAlreadyExistsException(SongDto songDto){
+        super("Song with name: " + songDto.getName() + ", artist: "
+                + songDto.getArtist() + " and publishYear: "
+                + songDto.getPublishYear() + " already exists.");
     }
 }

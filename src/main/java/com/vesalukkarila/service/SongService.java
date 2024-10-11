@@ -1,5 +1,6 @@
 package com.vesalukkarila.service;
 
+import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.repository.SongRepository;
 import com.vesalukkarila.web.exception.SongAlreadyExistsException;
@@ -33,11 +34,11 @@ public class SongService {
 
 
     @Transactional
-    public Song createSong(String name, String artist, Integer publishYear){
-        if (songRepository.songExists(name, artist, publishYear)){
-            throw new SongAlreadyExistsException(name,artist,publishYear);
+    public Song createSong(SongDto songDto){
+        if (songRepository.songExists(songDto)){
+            throw new SongAlreadyExistsException(songDto);
         }
-        Song song = new Song(name, artist, publishYear);
+        Song song = new Song(songDto);
         song.setId(UUID.randomUUID());
         songRepository.save(song);
         return song;
@@ -45,11 +46,11 @@ public class SongService {
 
 
     @Transactional
-    public Song updateSong(String id, String name, String artist, Integer publishYear){
-        if (songRepository.songExists(name, artist, publishYear)){
-            throw new SongAlreadyExistsException(name, artist, publishYear);
+    public Song updateSong(String id, SongDto songDto){
+        if (songRepository.songExists(songDto)){
+            throw new SongAlreadyExistsException(songDto);
         }
-        Song song = new Song(name, artist, publishYear);
+        Song song = new Song(songDto);
         song.setId(UUID.fromString(id));
         songRepository.update(song);
         return song;
@@ -57,11 +58,11 @@ public class SongService {
 
 
     @Transactional
-    public Song patchSong(String id, String name, String artist, Integer publishYear){
-        if (songRepository.songExists(name, artist, publishYear)){
-            throw new SongAlreadyExistsException(name, artist, publishYear);
+    public Song patchSong(String id, SongDto songDto){
+        if (songRepository.songExists(songDto)){
+            throw new SongAlreadyExistsException(songDto);
         }
-        Song song = new Song(name, artist, publishYear);
+        Song song = new Song(songDto);
         song.setId(UUID.fromString(id));
         songRepository.update(song);
         return song;

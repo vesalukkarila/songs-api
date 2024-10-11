@@ -20,6 +20,12 @@ public class SongDto {
     @YearRange(groups = {CreateOrPutGroup.class, PatchGroup.class})
     private Integer publishYear;
 
+    public SongDto(String name, String artist, Integer publishYear) {
+        this.name = name;
+        this.artist = artist;
+        this.publishYear = publishYear;
+    }
+
     public String getName() {
         return name;
     }

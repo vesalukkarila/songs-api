@@ -14,6 +14,12 @@ public class Song {
     public Song() {
     }
 
+    public Song(SongDto songDto) {
+        this.name = songDto.getName();
+        this.artist = songDto.getArtist();
+        this.publishYear = songDto.getPublishYear();
+    }
+
     public Song(String name, String artist, Integer publishYear) {
         this.id = UUID.randomUUID();
         this.name = name;

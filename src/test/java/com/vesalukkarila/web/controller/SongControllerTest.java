@@ -1,8 +1,10 @@
 package com.vesalukkarila.web.controller;
 
+import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
 import com.vesalukkarila.web.exception.InvalidUUIDException;
+import com.vesalukkarila.web.exception.SongAlreadyExistsException;
 import com.vesalukkarila.web.exception.SongNotFoundException;
 import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,14 +85,14 @@ public class SongControllerTest {
     @Nested
     public class GetSongByIdTests {
 
-        @Test   //TODO: test status code in integration tests
+        @Test   //TODO: test status code 400 in integration tests
         public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
             String invalidId = "12345678-1234-1234-1234-incorrect";
             assertThrows(InvalidUUIDException.class,
                     () ->songsController.getSongById(invalidId));
         }
 
-        @Test   //TODO: test status code in integration tests
+        @Test   //TODO: test status code 404 in integration tests
         public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
             String validNonExistentId = "12345678-1234-1234-1234-12345678af12";
             when(songService.findById(validNonExistentId)).thenThrow(SongNotFoundException.class);
@@ -110,6 +112,28 @@ public class SongControllerTest {
         }
     }
 
+    @Nested
+    public class CreateSongTests{
+        /*missing fields, failed validations, songallreadyexistsexception, OKsuccess*/
+
+        @Test
+        public void shouldThrowSongAlreadyExistsException(){
+            //TODO: before implementing: pass song dto in controller -> service -> repository and extract fields when necessary
+            System.out.println("not yet implemented, refactor code before");
+        }
+
+
+        @Test
+        public void shouldCreateSongAndReturnCreatedStatus(){
+            SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
+            Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
+            when(songService.createSong(songDto)).thenReturn(song);
+            ResponseEntity<Song> response = songsController.createSong(songDto);
+            assertEquals(song, response.getBody());
+            assertEquals(HttpStatus.CREATED, response.getStatusCode());
+            //TODO: assert location in headers
+        }
+    }
     /*  TODO: POST method
         TODO: PUT method
         TODO:PATCH method

@@ -54,8 +54,7 @@ public class SongsController {
     public ResponseEntity<Song> createSong(@RequestBody
                                                @Validated(CreateOrPutGroup.class)
                                                SongDto songDto){
-        Song song = songService.createSong(songDto.getName(),
-                songDto.getArtist(), songDto.getPublishYear());
+        Song song = songService.createSong(songDto);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create("/songs/" + song.getId()));
         return new ResponseEntity<>(song, headers, HttpStatus.CREATED);
@@ -68,8 +67,7 @@ public class SongsController {
                                            @Validated(CreateOrPutGroup.class)
                                            SongDto songDto){
         validateUUID(id);
-        Song song = songService.updateSong(id, songDto.getName(),
-                songDto.getArtist(), songDto.getPublishYear());
+        Song song = songService.updateSong(id, songDto);
         return new ResponseEntity<>(song, HttpStatus.OK);
     }
 
@@ -83,7 +81,7 @@ public class SongsController {
         Song song = songService.findById(id);
         song.updateFields(songDto);
         Song updatedSong = songService.patchSong(
-                id, song.getName(), song.getArtist(), song.getPublishYear());
+                id, songDto);
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);
     }
 
