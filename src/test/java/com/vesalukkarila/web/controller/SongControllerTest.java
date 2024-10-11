@@ -114,16 +114,16 @@ public class SongControllerTest {
 
     @Nested
     public class CreateSongTests{
-        /*missing fields, failed validations, songallreadyexistsexception, OKsuccess*/
+        /*missing fields, failed validations*/
 
-        @Test
+        @Test   //TODO: test status code in integration tests
         public void shouldThrowSongAlreadyExistsException(){
-            //TODO: before implementing: pass song dto in controller -> service -> repository and extract fields when necessary
-            System.out.println("not yet implemented, refactor code before");
+            SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
+            when(songService.createSong(songDto)).thenThrow(SongAlreadyExistsException.class);
+            assertThrows(SongAlreadyExistsException.class, () -> songsController.createSong(songDto));
         }
 
-
-        @Test
+        @Test   //TODO: assert location in headers either here or in integration tests
         public void shouldCreateSongAndReturnCreatedStatus(){
             SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
             Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
@@ -131,7 +131,7 @@ public class SongControllerTest {
             ResponseEntity<Song> response = songsController.createSong(songDto);
             assertEquals(song, response.getBody());
             assertEquals(HttpStatus.CREATED, response.getStatusCode());
-            //TODO: assert location in headers
+            response.getHeaders().getLocation();
         }
     }
     /*  TODO: POST method
