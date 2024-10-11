@@ -29,16 +29,16 @@ public class SongsController {
 
 
     @GetMapping("/")
-    public Map<String, String> greeting(){
+    public ResponseEntity<Map<String, String>> greeting(){
         Map<String, String> response = new HashMap<>();
         response.put("message", "Hello from Songs API");
-        return response;
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 
     @GetMapping("/songs")
-    public List<Song> getSongs(){
-        return songService.findAll();
+    public ResponseEntity<List<Song>> getSongs(){
+        return new ResponseEntity<>(songService.findAll(), HttpStatus.OK);
     }
 
 
