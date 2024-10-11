@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -30,9 +31,10 @@ public class SongControllerTest {
 
     @Test
     public void shouldReturnGreetingMessage(){
-        Map<String, String> response= songsController.greeting();
-        assertNotNull(response);
-        assertEquals(response.get("message"), "Hello from Songs API");
+        ResponseEntity<Map<String, String>> response = songsController.greeting();
+        assertNotNull(response.getBody());
+        assertEquals(response.getBody().get("message"), "Hello from Songs API");
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Nested
@@ -42,8 +44,9 @@ public class SongControllerTest {
         public void shouldReturnEmptyListWhenNoSongsAvailable(){
             List<Song> songs = new ArrayList<>();
             when(songService.findAll()).thenReturn(songs);
-            List<Song> response = songsController.getSongs();
-            assertEquals(0, response.size());
+            ResponseEntity<List<Song>> response = songsController.getSongs();
+            assertEquals(0, Objects.requireNonNull(response.getBody()).size());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
         @Test
@@ -51,11 +54,12 @@ public class SongControllerTest {
             List<Song> songs = List.of(
                     new Song("The Thrill Is Gone", "B.B. King", 1969));
             when(songService.findAll()).thenReturn(songs);
-            List<Song> response = songsController.getSongs();
-            assertEquals(1, response.size());
-            assertEquals("The Thrill Is Gone", response.get(0).getName());
-            assertEquals("B.B. King", response.get(0).getArtist());
-            assertEquals(1969, response.get(0).getPublishYear());
+            ResponseEntity<List<Song>> response = songsController.getSongs();
+            assertEquals(1, Objects.requireNonNull(response.getBody()).size());
+            assertEquals("The Thrill Is Gone", response.getBody().get(0).getName());
+            assertEquals("B.B. King", response.getBody().get(0).getArtist());
+            assertEquals(1969, response.getBody().get(0).getPublishYear());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
         }
 
         @Test
@@ -64,28 +68,29 @@ public class SongControllerTest {
                     new Song("The Thrill Is Gone", "B.B. King", 1969),
                     new Song("Sweet Home Chicago", "Robert Johnson", 1936));
             when(songService.findAll()).thenReturn(songs);
-            List<Song> response = songsController.getSongs();
-            assertEquals(2, response.size());
-            assertEquals("The Thrill Is Gone", response.get(0).getName());
-            assertEquals("B.B. King", response.get(0).getArtist());
-            assertEquals(1969, response.get(0).getPublishYear());
-            assertEquals("Sweet Home Chicago", response.get(1).getName());
-            assertEquals("Robert Johnson", response.get(1).getArtist());
-            assertEquals(1936, response.get(1).getPublishYear());
+            ResponseEntity<List<Song>> response = songsController.getSongs();
+            assertEquals(2, Objects.requireNonNull(response.getBody()).size());
+            assertEquals("The Thrill Is Gone", response.getBody().get(0).getName());
+            assertEquals("B.B. King", response.getBody().get(0).getArtist());
+            assertEquals(1969, response.getBody().get(0).getPublishYear());
+            assertEquals("Sweet Home Chicago", response.getBody().get(1).getName());
+            assertEquals("Robert Johnson", response.getBody().get(1).getArtist());
+            assertEquals(1936, response.getBody().get(1).getPublishYear());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
         }
     }
 
     @Nested
     public class GetSongByIdTests {
 
-        @Test
+        @Test   //TODO: test status code in integration tests
         public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
             String invalidId = "12345678-1234-1234-1234-incorrect";
             assertThrows(InvalidUUIDException.class,
                     () ->songsController.getSongById(invalidId));
         }
 
-        @Test
+        @Test   //TODO: test status code in integration tests
         public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
             String validNonExistentId = "12345678-1234-1234-1234-12345678af12";
             when(songService.findById(validNonExistentId)).thenThrow(SongNotFoundException.class);
@@ -99,6 +104,9 @@ public class SongControllerTest {
             Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
             song.setId(UUID.fromString(validExistentId));
             when(songService.findById(validExistentId)).thenReturn(song);
+            ResponseEntity<Song> response = songsController.getSongById(validExistentId);
+            assertEquals(song, response.getBody());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
         }
     }
 
@@ -110,7 +118,10 @@ public class SongControllerTest {
 
 
 
-
+/*TODO:
+   Questions:
+   - How to divide tests of one class when size expands like in this one
+   - testing status codes in unit or integration tests or both?*/
 
 
 
