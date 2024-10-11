@@ -4,16 +4,14 @@ import com.vesalukkarila.model.Song;
 import com.vesalukkarila.service.SongService;
 import com.vesalukkarila.web.exception.InvalidUUIDException;
 import com.vesalukkarila.web.exception.SongNotFoundException;
+import java.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import org.springframework.http.HttpStatus;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -82,20 +80,28 @@ public class SongControllerTest {
 
         @Test
         public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
+            String invalidId = "12345678-1234-1234-1234-incorrect";
             assertThrows(InvalidUUIDException.class,
-                    () ->songsController.getSongById("12345678-1234-1234-1234-incorrect"));
+                    () ->songsController.getSongById(invalidId));
         }
 
         @Test
         public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
-            String nonExistentId = "12345678-1324-1234-1234-12345678af12";
-            when(songService.findById(nonExistentId)).thenThrow(SongNotFoundException.class);
+            String validNonExistentId = "12345678-1234-1234-1234-12345678af12";
+            when(songService.findById(validNonExistentId)).thenThrow(SongNotFoundException.class);
             assertThrows(SongNotFoundException.class,
-                    () -> songsController.getSongById(nonExistentId));
+                    () -> songsController.getSongById(validNonExistentId));
         }
 
-        //TODO: with existing id
+        @Test
+        public void shouldReturnRequestedSongWhenExistentSongRequested() {
+            String validExistentId = "12345678-1234-1234-1234-123456781112";
+            Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
+            song.setId(UUID.fromString(validExistentId));
+            when(songService.findById(validExistentId)).thenReturn(song);
+        }
     }
+
     /*  TODO: POST method
         TODO: PUT method
         TODO:PATCH method
