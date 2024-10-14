@@ -85,14 +85,14 @@ public class SongControllerTest {
     @Nested
     public class GetSongByIdTests {
 
-        @Test   //TODO: test status code 400 in integration tests or separate unit test, throws...
+        @Test
         public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
             String invalidId = "12345678-1234-1234-1234-incorrect";
             assertThrows(InvalidUUIDException.class,
                     () ->songsController.getSongById(invalidId));
         }
 
-        @Test   //TODO: test status code 404 in integration tests or separate unit test, throws...
+        @Test
         public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
             String validNonExistentId = "12345678-1234-1234-1234-12345678af12";
             when(songService.findById(validNonExistentId)).thenThrow(SongNotFoundException.class);
@@ -114,16 +114,15 @@ public class SongControllerTest {
 
     @Nested
     public class CreateSongTests{
-        /*missing fields, failed validations*/
 
-        @Test   //TODO: test status code in integration tests or separate unit test, throws...
+        @Test
         public void shouldThrowSongAlreadyExistsException(){
             SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
             when(songService.createSong(songDto)).thenThrow(SongAlreadyExistsException.class);
             assertThrows(SongAlreadyExistsException.class, () -> songsController.createSong(songDto));
         }
 
-        @Test   //TODO: assert location in headers either here or in integration tests
+        @Test
         public void shouldCreateSongAndReturnCreatedStatus(){
             SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
             Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
@@ -134,18 +133,82 @@ public class SongControllerTest {
             response.getHeaders().getLocation();
         }
     }
-    /*  
-        TODO: PUT method
-        TODO:PATCH method
-        TODO: DELETE method
-     */
+
+    @Nested
+    public class UpdateSongTests{
+
+        @Test
+        public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
+            String invalidId = "12345678-1234-1234-1234-incorrect";
+            SongDto songDto = new SongDto("The Thrill is Gone", "B.B. King", 1969);
+            assertThrows(InvalidUUIDException.class,
+                    () ->songsController.updateSong(invalidId, songDto));
+        }
+
+        @Test
+        public void shouldUpdateSongAndReturnUpdatedResourceAndStatusOk(){
+            String id = "12345678-1234-1234-1234-123456781112";
+            SongDto songDto = new SongDto("The Thrill is Gone", "B.B. King", 1969);
+            Song song = new Song("The Thrill Is Gone", "B.B. King", 1969);
+            when(songService.updateSong(id, songDto)).thenReturn(song);
+            ResponseEntity<Song> response = songsController.updateSong(id, songDto);
+            assertEquals(song, response.getBody());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+    }
+
+    @Nested
+    public class PatchSongTests{
+
+        @Test
+        public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
+            String invalidId = "12345678-1234-1234-1234-incorrect";
+            SongDto songDto = new SongDto("The Thrill is Gone", "B.B. King", 1969);
+            assertThrows(InvalidUUIDException.class,
+                    () ->songsController.patchSong(invalidId, songDto));
+        }
+
+        @Test
+        public void shouldPatchSongAndReturnPatchedResourceAndStatusOk(){
+            String validExistentId = "12345678-1234-1234-1234-123456781112";
+            SongDto songDto = new SongDto();
+            songDto.setName("The Thrill is Not Gone");
+            Song song = new Song("The Thrill Is Not Gone", "B.B. King", 1969);
+            when(songService.patchSong(validExistentId, songDto)).thenReturn(song);
+            ResponseEntity<Song> response = songsController.patchSong(validExistentId, songDto);
+            assertEquals(song, response.getBody());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
+    }
+
+    @Nested
+    public class DeleteSongTests{
+
+        @Test
+        public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
+            String invalidId = "12345678-1234-1234-1234-incorrect";
+            assertThrows(InvalidUUIDException.class,
+                    () ->songsController.deleteSong(invalidId));
+        }
+
+        @Test
+        public void shouldReturnStatusCodeNoContent(){
+            String validExistentId = "12345678-1234-1234-1234-123456781112";
+            ResponseEntity<Void> response = songsController.deleteSong(validExistentId);
+            assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        }
+    }
 
 
 
 /*TODO:
    Questions:
+   - naming testmethods
+   - should status code tests be in separate methods
    - How to divide tests of one class when size expands like in this one
-   - testing status codes in separate unit (throws..) or integration tests or both?*/
+   - testing status codes in separate unit (throws..) or integration tests or both?
+   - validation tests easier in integration tests i believe
+   - also exceptions would be easier to test in integration tests i think?*/
 
 
 
