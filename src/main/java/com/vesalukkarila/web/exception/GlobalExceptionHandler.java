@@ -10,53 +10,88 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Global exception handler for the application that handles various
+ * exceptions and returns appropriate HTTP responses.
+ * This class uses Spring's @RestControllerAdvice annotation to
+ * handle exceptions thrown by controllers and to return standardized error
+ * responses in JSON format.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /**
+     * Handles SongNotFoundException and returns a 404 Not Found response.
+     *
+     * @param ex the exception that was thrown
+     * @return a ResponseEntity containing the error message and HTTP status
+     */
     @ExceptionHandler(SongNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleSongNotFound(SongNotFoundException ex){
+    public ResponseEntity<Map<String, String>> handleSongNotFound(SongNotFoundException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-
+    /**
+     * Handles SongAlreadyExistsException and returns a 409 Conflict response.
+     *
+     * @param ex the exception that was thrown
+     * @return a ResponseEntity containing the error message and HTTP status
+     */
     @ExceptionHandler(SongAlreadyExistsException.class)
-    public ResponseEntity<Map<String, String>> handleSongAlreadyExists(SongAlreadyExistsException ex){
+    public ResponseEntity<Map<String, String>> handleSongAlreadyExists(SongAlreadyExistsException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
-
+    /**
+     * Handles InvalidUUIDException and returns a 400 Bad Request response.
+     *
+     * @param ex the exception that was thrown
+     * @return a ResponseEntity containing the error message and HTTP status
+     */
     @ExceptionHandler(InvalidUUIDException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidUUID(InvalidUUIDException ex){
+    public ResponseEntity<Map<String, String>> handleInvalidUUID(InvalidUUIDException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles EmptyPatchRequestException and returns a 400 Bad Request response.
+     *
+     * @param ex the exception that was thrown
+     * @return a ResponseEntity containing the error message and HTTP status
+     */
     @ExceptionHandler(EmptyPatchRequestException.class)
-    public ResponseEntity<Map<String, String>> handleEmptyPatchRequest(EmptyPatchRequestException ex){
+    public ResponseEntity<Map<String, String>> handleEmptyPatchRequest(EmptyPatchRequestException ex) {
         Map<String, String> response = new HashMap<>();
         response.put("error", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Handles MethodArgumentNotValidException for validation errors
+     * during method argument binding and returns a 400 Bad Request response
+     * with detailed field errors.
+     *
+     * @param ex the exception that was thrown
+     * @return a ResponseEntity containing a map of field errors and HTTP status
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid
-            (MethodArgumentNotValidException ex){
-
+    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
 
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String field;
-            if (error instanceof FieldError){
+            if (error instanceof FieldError) {
                 field = ((FieldError) error).getField();
-                if (field.equals("publishYear")){
+                if (field.equals("publishYear")) {
                     field = "publish_year";
                 }
-            }else {
+            } else {
                 field = error.getObjectName();
             }
             String errorMessage = error.getDefaultMessage();
