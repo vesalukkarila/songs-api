@@ -78,10 +78,7 @@ public class SongsController {
                                           @Validated(PatchGroup.class)
                                           SongDto songDto){
         validateUUID(id);
-        Song song = songService.findById(id);
-        song.updateFields(songDto);
-        Song updatedSong = songService.patchSong(
-                id, songDto);
+        Song updatedSong = songService.patchSong(id, songDto);
         return new ResponseEntity<>(updatedSong, HttpStatus.OK);
     }
 

@@ -85,14 +85,14 @@ public class SongControllerTest {
     @Nested
     public class GetSongByIdTests {
 
-        @Test   //TODO: test status code 400 in integration tests
+        @Test   //TODO: test status code 400 in integration tests or separate unit test, throws...
         public void shouldThrowInvalidUUIDExceptionWhenRequestedWithInvalidSongId(){
             String invalidId = "12345678-1234-1234-1234-incorrect";
             assertThrows(InvalidUUIDException.class,
                     () ->songsController.getSongById(invalidId));
         }
 
-        @Test   //TODO: test status code 404 in integration tests
+        @Test   //TODO: test status code 404 in integration tests or separate unit test, throws...
         public void shouldThrowSongNotFoundExceptionWhenRequestedWithNonExistingSongId(){
             String validNonExistentId = "12345678-1234-1234-1234-12345678af12";
             when(songService.findById(validNonExistentId)).thenThrow(SongNotFoundException.class);
@@ -116,7 +116,7 @@ public class SongControllerTest {
     public class CreateSongTests{
         /*missing fields, failed validations*/
 
-        @Test   //TODO: test status code in integration tests
+        @Test   //TODO: test status code in integration tests or separate unit test, throws...
         public void shouldThrowSongAlreadyExistsException(){
             SongDto songDto = new SongDto("The Thrill Is Gone", "B.B. King", 1969);
             when(songService.createSong(songDto)).thenThrow(SongAlreadyExistsException.class);
@@ -134,7 +134,7 @@ public class SongControllerTest {
             response.getHeaders().getLocation();
         }
     }
-    /*  TODO: POST method
+    /*  
         TODO: PUT method
         TODO:PATCH method
         TODO: DELETE method
@@ -145,7 +145,7 @@ public class SongControllerTest {
 /*TODO:
    Questions:
    - How to divide tests of one class when size expands like in this one
-   - testing status codes in unit or integration tests or both?*/
+   - testing status codes in separate unit (throws..) or integration tests or both?*/
 
 
 

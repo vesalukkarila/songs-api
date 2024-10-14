@@ -5,7 +5,6 @@ import com.vesalukkarila.model.Song;
 import com.vesalukkarila.repository.SongRepository;
 import com.vesalukkarila.web.exception.SongAlreadyExistsException;
 import com.vesalukkarila.web.exception.SongNotFoundException;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,11 +34,11 @@ public class SongService {
 
     @Transactional
     public Song createSong(SongDto songDto){
-        if (songRepository.songExists(songDto)){
-            throw new SongAlreadyExistsException(songDto);
-        }
         Song song = new Song(songDto);
         song.setId(UUID.randomUUID());
+        if (songRepository.songExists(song)){
+            throw new SongAlreadyExistsException(song);
+        }
         songRepository.save(song);
         return song;
     }
@@ -47,23 +46,23 @@ public class SongService {
 
     @Transactional
     public Song updateSong(String id, SongDto songDto){
-        if (songRepository.songExists(songDto)){
-            throw new SongAlreadyExistsException(songDto);
+        Song song = this.findById(id);
+        song.updateFields(songDto);
+        if (songRepository.songExists(song)){
+            throw new SongAlreadyExistsException(song);
         }
-        Song song = new Song(songDto);
-        song.setId(UUID.fromString(id));
         songRepository.update(song);
         return song;
     }
 
-
     @Transactional
     public Song patchSong(String id, SongDto songDto){
-        if (songRepository.songExists(songDto)){
-            throw new SongAlreadyExistsException(songDto);
+        Song song = this.findById(id);
+        song.updateFields(songDto);
+        if (songRepository.songExists(song)){
+            throw new SongAlreadyExistsException(song);
         }
-        Song song = new Song(songDto);
-        song.setId(UUID.fromString(id));
+//        song.setId(UUID.fromString(id));
         songRepository.update(song);
         return song;
     }
