@@ -74,11 +74,6 @@ public class SongRepository implements ISongRepository{
         return count != null && count > 0;
     }
 
-//    public boolean songWithIdExists(String id){
-//        String sql = "SELECT COUNT(*) FROM songs WHERE id = ?";
-//        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, UUID.fromString(id));
-//        return count != null && count > 0;
-//    }
 
     private static class SongRowMapper implements RowMapper<Song> {
         @Override

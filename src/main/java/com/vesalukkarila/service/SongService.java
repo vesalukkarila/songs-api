@@ -3,6 +3,7 @@ package com.vesalukkarila.service;
 import com.vesalukkarila.dto.SongDto;
 import com.vesalukkarila.model.Song;
 import com.vesalukkarila.repository.SongRepository;
+import com.vesalukkarila.web.exception.EmptyPatchRequestException;
 import com.vesalukkarila.web.exception.SongAlreadyExistsException;
 import com.vesalukkarila.web.exception.SongNotFoundException;
 
@@ -57,14 +58,21 @@ public class SongService {
 
     @Transactional
     public Song patchSong(String id, SongDto songDto){
+        validatePatchFields(songDto);
         Song song = this.findById(id);
         song.updateFields(songDto);
         if (songRepository.songExists(song)){
             throw new SongAlreadyExistsException(song);
         }
-//        song.setId(UUID.fromString(id));
         songRepository.update(song);
         return song;
+    }
+
+    private void validatePatchFields(SongDto songDto) {
+        if (songDto.getName() == null && songDto.getArtist() == null
+                && songDto.getPublishYear() == null) {
+            throw new EmptyPatchRequestException();
+        }
     }
 
 
