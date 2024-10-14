@@ -1,4 +1,8 @@
 package com.vesalukkarila.web.validation;
 
-public interface CreateOrPutGroup{
+/**
+ * Marker interface used to group validation constraints for
+ * create and update operations in the application.
+ */
+public interface CreateOrPutGroup {
 }
