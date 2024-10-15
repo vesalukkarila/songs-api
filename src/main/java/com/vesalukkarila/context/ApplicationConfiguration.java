@@ -16,13 +16,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  * ApplicationConfiguration is the central configuration class for the Spring application.
  * This class is responsible for setting up the necessary beans for the application, including
  * the ObjectMapper for JSON processing, data source for the H2 database, JdbcTemplate for
- * database operations, and transaction management.
+ * database operations.
  */
 @Configuration
 @ComponentScan(basePackageClasses = ApplicationLauncher.class)
 @EnableWebMvc
 @EnableTransactionManagement
-public class ApplicationConfiguration {
+public class ApplicationConfiguration{
 
     /**
      * Creates and configures an ObjectMapper bean.
