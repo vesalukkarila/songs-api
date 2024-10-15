@@ -138,7 +138,14 @@ curl -X POST http://localhost:8080/songs \
 ### Request
 - **Path variable:** id(string), the unique identifier of the song to be updated (UUID).
 ```sh
-curli
+curl -X PUT http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "The Thrill Is NOT  Gone",
+  "artist": "B.B. King",
+  "publish_year": 1969
+}' -i
+
 ```
 - **Request body:** All fields required, example:
 ```json
@@ -229,7 +236,14 @@ curli
 - **Path variable:** id(string), the unique identifier of the song to be partially updated (UUID).
 
 ```sh
-curli
+curl -X PATCH http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
+-H "Content-Type: application/json" \
+-d '{
+  "name": "The Thrill Is Gone AGAIN",
+  "artist": "B.B. King",
+  "publish_year": 1969
+}' -i
+
 ```
 - **Request body:** Only one field required, example:
 ```json
@@ -297,9 +311,10 @@ curli
 
 ### Request
 - **Path variable:** id(string), the unique identifier of the song to be deleted (UUID).
-
 ```sh
-curli
+curl -X DELETE http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 -H \
+"Content-Type: application/json" -i
+
 ```
 ### Success response
 - **Status code**: 204 NO CONTENT
