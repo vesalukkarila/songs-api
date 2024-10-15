@@ -93,11 +93,11 @@ curl -X POST http://localhost:8080/songs \
 ### Error responses
 - **Status code**: 409 CONFLICT  
 - **Content-Type**: application/json 
-- **Response body:** 
+- **Response body:** if trying to add duplicate of an existing song
 
 ```json
 {
-    "error": "Song with name: The Thrill is Gone, artist: B.B. King and publishYear: 1969 already exists."
+    "error": "Song with name: The Thrill is Gone, artist: B.B. King and publish_year: 1969 already exists."
 }
 ```
 
@@ -113,7 +113,7 @@ curl -X POST http://localhost:8080/songs \
 - **Response body:** if artist not provided
 ```json
 {
-    "name": "must not be blank"
+    "artist": "must not be blank"
 }
 ```
 - **Response body:** if year not provided
@@ -126,9 +126,69 @@ curl -X POST http://localhost:8080/songs \
 - **Response body:** if publish_year not within range  
 ```json
 {
-    "publish_year": "Year must be between 1889 and the current year."
+    "publish_year": "publish_year must be between 1889 and the current year."
 }
 ```
 </details>
 
 
+<details>
+  <summary><code>PUT</code> <code><b>/songs/{id}</b></code> <code>(Update an existing Song)</code></summary>
+
+### Request
+- **Path variable:** id(string), the unique identifier of the song to be updated (UUID).
+```sh
+curli
+```
+- **Request body:** All fields required, example:
+```json
+{
+    "name" : "The Thrill is Not Gone",
+    "artist" : "B.B. King",
+    "publish_year" : 1969
+}
+```
+### Success response
+### Error responses
+#### OR
+</details>
+
+
+
+<details>
+  <summary><code>PATCH</code> <code><b>/songs/{id}</b></code> <code>(Partially update an existing Song)</code></summary>
+
+### Request
+- **Path variable:** id(string), the unique identifier of the song to be partially updated (UUID).
+
+```sh
+curli
+```
+- **Request body:** Only one field required, example:
+```json
+{
+    "name" : "The Thrill is Gone",
+    "artist" : "B.B. King",
+    "publish_year" : 1969
+}
+```
+### Success response
+### Error responses
+#### OR
+</details>
+
+
+
+<details>
+  <summary><code>DELETE</code> <code><b>/songs/{id}</b></code> <code>(Delete a Song)</code></summary>
+
+### Request
+- **Path variable:** id(string), the unique identifier of the song to be deleted (UUID).
+
+```sh
+curli
+```
+### Success response
+### Error responses
+#### OR
+</details>
