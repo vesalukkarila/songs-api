@@ -20,7 +20,7 @@ public @interface YearRange {
      *
      * @return the default error message
      */
-    String message() default "Year must be between 1889 and the current year.";
+    String message() default "publish_year must be between 1889 and the current year.";
 
     /**
      * Groups for the validation.
