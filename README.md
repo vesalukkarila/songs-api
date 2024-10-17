@@ -27,7 +27,7 @@ curl http://localhost:8080/ -i
 
 
 <details>
-  <summary><code>GET</code> <code><b>/songs</b></code> <code>(Retrieves a list of all songs)</code></summary>
+  <summary><code>GET</code> <code><b>/songs</b></code> <code>(Retrieves a list of all Songs)</code></summary>
 
  ### Request
 ```sh
@@ -36,7 +36,7 @@ curl http://localhost:8080/songs -i
 ### Response
 - **Status code:** 200 OK  
 - **Content-Type:** application/json
-- **Response body:** Example, before any user POST's:
+- **Response body:** Before any user POST's, example:
 ```json
 
 [
@@ -93,7 +93,7 @@ curl -X POST http://localhost:8080/songs \
 ### Error responses
 - **Status code**: 409 CONFLICT  
 - **Content-Type**: application/json 
-- **Response body:** if trying to add duplicate of an existing song
+- **Response body:** if trying to add duplicate of an existing Song
 
 ```json
 {
@@ -133,10 +133,10 @@ curl -X POST http://localhost:8080/songs \
 
 
 <details>
-  <summary><code>PUT</code> <code><b>/songs/{id}</b></code> <code>(Update an existing Song)</code></summary>
+  <summary><code>PUT</code> <code><b>/songs/{id}</b></code> <code>(Updates an existing Song)</code></summary>
 
 ### Request
-- **Path variable:** id(string), the unique identifier of the song to be updated (UUID).
+- **Path variable:** id(string), the unique identifier of the Song to be updated (UUID).
 ```sh
 curl -X PUT http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 -H "Content-Type: application/json" \
@@ -172,7 +172,7 @@ curl -X PUT http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 ### Error responses
 - **Status code**: 409 CONFLICT  
 - **Content-Type**: application/json 
-- **Response body:** if trying to update a duplicate of an existing song
+- **Response body:** if trying to update a duplicate of an existing Song
 ```json
 {
     "error": "Song with name: The Thrill is NOT Gone, artist: B.B. King and publish_year: 1969 already exists."
@@ -182,7 +182,7 @@ curl -X PUT http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 #### OR
 - **Status code**: 404 NOT FOUND
 - **Content-Type**: application/json 
-- **Response body:** if song with provided id not found in database
+- **Response body:** if Song with provided id not found in database
 ```json
 {
     "error": "Song with id 273f842d-6307-476d-8ba2-7c215a0290af was not found"
@@ -230,10 +230,10 @@ curl -X PUT http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 
 
 <details>
-  <summary><code>PATCH</code> <code><b>/songs/{id}</b></code> <code>(Partially update an existing Song)</code></summary>
+  <summary><code>PATCH</code> <code><b>/songs/{id}</b></code> <code>(Partially updates an existing Song)</code></summary>
 
 ### Request
-- **Path variable:** id(string), the unique identifier of the song to be partially updated (UUID).
+- **Path variable:** id(string), the unique identifier of the Song to be partially updated (UUID).
 
 ```sh
 curl -X PATCH http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
@@ -266,7 +266,7 @@ curl -X PATCH http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 ### Error responses
 - **Status code**: 404 NOT FOUND
 - **Content-Type**: application/json 
-- **Response body:** if song with provided id not found in database
+- **Response body:** if Song with provided id not found in database
 ```json
 {
     "error": "Song with id 273f842d-6307-476d-8ba2-7c215a0290af was not found"
@@ -307,10 +307,10 @@ curl -X PATCH http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 
 
 <details>
-  <summary><code>DELETE</code> <code><b>/songs/{id}</b></code> <code>(Delete a Song)</code></summary>
+  <summary><code>DELETE</code> <code><b>/songs/{id}</b></code> <code>(Deletes a Song)</code></summary>
 
 ### Request
-- **Path variable:** id(string), the unique identifier of the song to be deleted (UUID).
+- **Path variable:** id(string), the unique identifier of the Song to be deleted (UUID).
 ```sh
 curl -X DELETE http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 -H \
 "Content-Type: application/json" -i
@@ -324,7 +324,7 @@ curl -X DELETE http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 
 ### Error responses
 - **Status code**: 404 NOT FOUND
 - **Content-Type**: application/json 
-- **Response body:** if song with provided id not found in database
+- **Response body:** if Song with provided id not found in database
 ```json
 {
     "error": "Song with id 273f842d-6307-476d-8ba2-7c215a0290af was not found"
