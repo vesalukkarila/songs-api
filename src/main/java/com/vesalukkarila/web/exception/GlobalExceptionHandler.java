@@ -7,9 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -80,7 +78,7 @@ public class GlobalExceptionHandler {
      * with detailed field errors.
      *
      * @param ex the exception that was thrown
-     * @return a ResponseEntity containing a map of field errors and HTTP status    //TODO: check after changes
+     * @return a ResponseEntity containing a map of field errors and HTTP status
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
