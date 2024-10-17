@@ -1,7 +1,29 @@
 
 # songs-api
-REST API excercise with Spring Core features without Spring Boot. 
-- TODO: fix descriptions, add:run with docker
+A RESTful API for managing songs, implemented using plain Spring features without Spring Boot.  
+This project provides CRUD functionality for song records, utilizing Spring MVC, Spring Validation, and a custom in-memory database (H2).
+
+## Technologies Used
+
+- Java 19
+- Spring MVC
+- H2 Database
+- Hibernate Validator
+- JUnit 5 and Mockito for testing
+
+## Getting Started
+
+To run the application:
+
+1. Clone the repository  
+2. Build the project using Maven: 
+```sh
+mvn clean install
+```
+3. Run the application with: 
+```sh
+java -jar target/songsapi-1.0-SNAPSHOT.jar
+```
 
 
 ## Endpoints
