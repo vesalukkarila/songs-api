@@ -7,7 +7,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SongNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleSongNotFound(SongNotFoundException ex) {
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
@@ -42,7 +44,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(SongAlreadyExistsException.class)
     public ResponseEntity<Map<String, String>> handleSongAlreadyExists(SongAlreadyExistsException ex) {
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
@@ -55,7 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidUUIDException.class)
     public ResponseEntity<Map<String, String>> handleInvalidUUID(InvalidUUIDException ex) {
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -68,7 +70,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyPatchRequestException.class)
     public ResponseEntity<Map<String, String>> handleEmptyPatchRequest(EmptyPatchRequestException ex) {
         Map<String, String> response = new HashMap<>();
-        response.put("error", ex.getMessage());
+        response.put("message", ex.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -78,25 +80,26 @@ public class GlobalExceptionHandler {
      * with detailed field errors.
      *
      * @param ex the exception that was thrown
-     * @return a ResponseEntity containing a map of field errors and HTTP status
+     * @return a ResponseEntity containing a map of field errors and HTTP status    //TODO: check after changes
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, Object>> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Validation error(s) in your request");
+
         Map<String, String> errors = new HashMap<>();
 
-        ex.getBindingResult().getAllErrors().forEach(error -> {
-            String field;
-            if (error instanceof FieldError) {
-                field = ((FieldError) error).getField();
-                if (field.equals("publishYear")) {
-                    field = "publish_year";
-                }
-            } else {
-                field = error.getObjectName();
+        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
+            String field = error.getField();
+            String errorMessage =  error.getDefaultMessage();
+
+            if ("publishYear".equals(field)) {
+                field = "publish_year";
             }
-            String errorMessage = error.getDefaultMessage();
+
             errors.put(field, errorMessage);
-        });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+        }
+        response.put("errors", errors);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 }

@@ -13,8 +13,8 @@ public class SongAlreadyExistsException extends RuntimeException {
      * @param song the song that already exists, which caused the exception
      */
     public SongAlreadyExistsException(Song song) {
-        super("Song with name: " + song.getName() + ", artist: "
-                + song.getArtist() + " and publish_year: "
-                + song.getPublishYear() + " already exists.");
+        super("Song with provided name(" + song.getName() + "), artist("
+                + song.getArtist() + ") and publish_year("
+                + song.getPublishYear() + ") already exists.");
     }
 }

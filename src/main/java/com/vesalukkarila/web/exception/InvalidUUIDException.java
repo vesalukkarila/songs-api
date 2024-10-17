@@ -12,6 +12,6 @@ public class InvalidUUIDException extends RuntimeException {
      * @param uuidStr the invalid UUID string that caused the exception
      */
     public InvalidUUIDException(String uuidStr) {
-        super("Given identifier: (" + uuidStr + ") is invalid. Expected format: 8-4-4-4-12 hex.");
+        super("Given identifier (" + uuidStr + ") is invalid. Expected format: 8-4-4-4-12 hex.");
     }
 }
