@@ -231,7 +231,7 @@ curl -X PATCH http://localhost:8080/songs/ff88ef0c-8a9b-43eb-9de2-ad8fcd82f252 \
 - **Request body:** Only one field required, example:
 ```json
 {
-    "name" : "The Thrill is Gone AGAIN",
+    "name" : "The Thrill is Gone AGAIN"
 }
 ```
 ### Success response
