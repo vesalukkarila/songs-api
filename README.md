@@ -13,18 +13,33 @@ This project provides CRUD functionality for song records, utilizing Spring MVC,
 
 ## Getting Started
 
-To run the application:
+To run the application, you have two choices:
+1. Run locally
+2. Run in Docker
 
-1. Clone the repository  
-2. Build the project using Maven: 
-```sh
-mvn clean install
-```
-3. Run the application with: 
-```sh
-java -jar target/songsapi-1.0-SNAPSHOT.jar
-```
+### Locally
 
+1. Ensure all the dependencies are installed
+2. Clone the repository  
+3. Build the project using Maven: 
+    ```sh
+    mvn clean install
+    ```
+4. Run the application with: 
+    ```sh
+    java -jar target/songsapi-1.0-SNAPSHOT.jar
+    ```
+
+### Run in Docker
+1. Build the image:
+    ```shell
+    docker build . -t songs-api:latest     
+    ```
+2. Run the image:
+    ```shell
+    docker run -p 8080:8080 songs-api:latest 
+    ```
+3. Open the api in http://localhost:8080
 
 ## Endpoints
 
@@ -32,9 +47,9 @@ java -jar target/songsapi-1.0-SNAPSHOT.jar
   <summary><code>GET</code> <code><b>/</b></code> <code>(Returns greeting message from the Songs API)</code></summary>
  
 ### Request
-```sh
-curl http://localhost:8080/ -i
-```
+    ```sh
+    curl http://localhost:8080/ -i
+    ```
 
 ### Response
 - **Status code:** 200 OK   
