@@ -4,21 +4,67 @@ info:
   version: 0.0.1
 
 paths:
-  /:
-    get:
-      description: Returns a greeting message from Songs API
-      operationId: greetingMessage
-      responses:
+  /:      #paths object
+    get:  #path item object
+      summary: Returns a greeting message from Songs API  #operation object
+      operationId: getGreeting                            #operation object
+      responses:                                              #operation object
         '200':
           description: OK
           content:
             application/json:
-              example:
-                {
-                  "message": "Hello from Songs API"
-                }
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Hello from Songs API"
+
+  /songs:
+    get:
+      summary: Returns all songs
+      operationId: getSongs
+      responses:
+        '200':
+          description: A list of all songs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Song'
+    post:
+      summary: Create a new song
+      operationId: createSong
+      responses:
+        '201':
+          description: Song created successfully
+          headers:
+            Location:
+              description: URL of the created song
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
 
 components:
   schemas:
+    Song:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        artist:
+          type: string
+        publish_year:
+          type: integer
+          format: int32
+
+
 
 
