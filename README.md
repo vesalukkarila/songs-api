@@ -10,6 +10,7 @@ This project provides CRUD functionality for song records, utilizing Spring MVC,
 - H2 Database
 - Hibernate Validator
 - JUnit 5 and Mockito for testing
+- Docker
 
 ## Getting Started
 
