@@ -38,7 +38,7 @@ To run the application, you have two choices:
     ```
 2. Run the image:
     ```shell
-    docker run -p 8080:8080 songs-api:latest 
+    docker run -it -p 8080:8080 songs-api:latest 
     ```
 3. Open the api in http://localhost:8080
 
