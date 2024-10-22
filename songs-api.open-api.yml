@@ -48,6 +48,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Song'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+        '409':
+          description: Conflict with already existing song
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongAlreadyExists'
+
+
+
+
+
 
 components:
   schemas:
@@ -59,12 +76,48 @@ components:
           format: uuid
         name:
           type: string
+          example: Thunderstruck
+        artist:
+          type: string
+          example: AC/DC
+        publish_year:
+          type: integer
+          format: int32
+          example: 1990
+    PutSongDto:
+      type: object
+      required:
+        - name
+        - artist
+        - publish_year
+      properties:
+        name:
+          type: string
         artist:
           type: string
         publish_year:
           type: integer
           format: int32
-
-
-
-
+    SongAlreadyExists:
+      type: object
+      properties:
+        message:
+          type: string
+          example:  "Song with provided name(name of the song), artist(artist of the song) and publish_year(publish_year of the song) already exists."
+    BadRequest:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
+          additionalProperties:
+            type: string
+            description: Validation error message for the specific field
+          example:
+            artist: "must not be blank"
+            name: "must not be blank"
+            publish_year: "publish_year must be between 1889 and the current year."
+      required:
+        - message
+        - errors
