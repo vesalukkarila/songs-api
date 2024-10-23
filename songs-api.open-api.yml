@@ -2,13 +2,12 @@ openapi: 3.0.0
 info: 
   title: Songs API
   version: 0.0.1
-
 paths:
-  /:      #paths object
-    get:  #path item object
-      summary: Returns a greeting message from Songs API  #operation object
-      operationId: getGreeting                            #operation object
-      responses:                                              #operation object
+  /:
+    get:
+      summary: Returns a greeting message from Songs API
+      operationId: getGreeting
+      responses:
         '200':
           description: OK
           content:
@@ -19,7 +18,6 @@ paths:
                   message:
                     type: string
                     example: "Hello from Songs API"
-
   /songs:
     get:
       summary: Returns all songs
@@ -43,7 +41,6 @@ paths:
               name: The Thrill is Gone
               artist: B.B. King
               publish_year: 1969
-
       responses:
         '201':
           description: Song created successfully.
@@ -73,7 +70,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongAlreadyExists'
-
   /songs/{id}:
     get:
       summary: Gets a specific song by id.
@@ -98,7 +94,6 @@ paths:
                 name: The Thrill is Gone
                 artist: B.B. King
                 publish_year: 1969
-
         '400':
           description: Bad request. Invalid format for id.
           content:
@@ -111,7 +106,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongNotFound'
-
     put:
       summary: Updates existing song.
       operationId: updateSong
@@ -210,7 +204,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongAlreadyExists'
-
     delete:
       summary: Deletes an existing song.
       operationId: deleteSong
@@ -235,8 +228,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongNotFound'
-
-
 components:
   schemas:
     AllSongs:
@@ -284,7 +275,6 @@ components:
           description: Artist who recorded the song.
         publish_year:
           type: integer
-          format: int32
           description: The year the song was recorded.
     SongResponse:
       type: object
@@ -308,7 +298,8 @@ components:
       properties:
         message:
           type: string
-          example:  "Song with provided name(name of the song), artist(artist of the song) and publish_year(publish_year of the song) already exists."
+          example:  "Song with provided name(name of the song), artist(artist of the song) 
+                    and publish_year(publish_year of the song) already exists."
     ValidationErrorRequestBody:
       type: object
       properties:
