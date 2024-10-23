@@ -30,9 +30,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/AllSongs'
+                $ref: '#/components/schemas/AllSongs'
     post:
       summary: Create a new song
       operationId: createSong
@@ -40,7 +38,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateSongRequest'
+              $ref: '#/components/schemas/CreateAndPutSongRequestBody'
+            example:
+              name: The Thrill is Gone
+              artist: B.B. King
+              publish_year: 1969
 
       responses:
         '201':
@@ -53,19 +55,72 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CreateSongResponse'
+                $ref: '#/components/schemas/SongResponse'
+              example:
+                id: 7ccc951a-25cf-4009-bfb1-b8ef4300db46
+                name: The Thrill is Gone
+                artist: B.B. King
+                publish_year: 1969
         '400':
           description: Bad request. Invalid field(s) in request body.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BadRequest'
+                $ref: '#/components/schemas/ValidationErrorRequestBody'
         '409':
           description: Conflict with already existing song.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SongAlreadyExists'
+
+  /songs/{id}:
+    get:
+      summary: Gets a specific song by id.
+      operationId: getSong
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: The id of the song to retrieve.
+          schema:
+            type: string
+            example: 7ccc951a-25cf-4009-bfb1-b8ef4300db46
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongResponse'
+              example:
+                name: The Thrill is Gone
+                artist: B.B. King
+                publish_year: 1969
+
+        '400':
+          description: Bad request. Invalid format for id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvalidIdFormat'
+        '404':
+          description: Not found. Song with requested id does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SongNotFound'
+
+#    put:
+#      summary: Updates existing song.
+#      operationId: updateSong
+#      requestBody:
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/UpdateSongRequest'
+
+    #patch:
 
 
 
@@ -75,22 +130,9 @@ paths:
 components:
   schemas:
     AllSongs:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The id of the song.
-        name:
-          type: string
-          description: The name of the song.
-        artist:
-          type: string
-          description: Artist who recorded the song.
-        publish_year:
-          type: integer
-          format: int32
-          description: The year the song was recorded.
+      type: array
+      items:
+        $ref: '#/components/schemas/SongResponse'
       example:
         - id: 0fa4ab70-379c-423e-8a89-c1fd344c685c
           name: Thunderstruck
@@ -100,7 +142,9 @@ components:
           name: Rokkibaby
           artist: Frederik
           publish_year: 1975
-    CreateSongRequest:
+
+    CreateAndPutSongRequestBody:
+      type: object
       required:
         - name
         - artist
@@ -116,11 +160,8 @@ components:
           type: integer
           format: int32
           description: The year the song was recorded.
-      example:
-        - name: The Thrill is Gone
-          artist: B.B. King
-          publish_year: 1969
-    CreateSongResponse:
+
+    SongResponse:
       type: object
       properties:
         id:
@@ -137,11 +178,9 @@ components:
           type: integer
           format: int32
           description: The year the song was recorded.
-      example:
-        - id: 7ccc951a-25cf-4009-bfb1-b8ef4300db46
-          name: The Thrill is Gone
-          artist: B.B. King
-          publish_year: 1969
+
+
+
 
     SongAlreadyExists:
       type: object
@@ -149,7 +188,7 @@ components:
         message:
           type: string
           example:  "Song with provided name(name of the song), artist(artist of the song) and publish_year(publish_year of the song) already exists."
-    BadRequest:
+    ValidationErrorRequestBody:
       type: object
       properties:
         message:
@@ -166,3 +205,15 @@ components:
       required:
         - message
         - errors
+    InvalidIdFormat:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Given identifier (ccc951a-25cf-4009-bfb1-b8ef4300db46) is invalid. Expected format: 8-4-4-4-12 hex."
+    SongNotFound:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Song with id 9ccc951a-25cf-4009-bfb1-b8ef4300db46 was not found"
