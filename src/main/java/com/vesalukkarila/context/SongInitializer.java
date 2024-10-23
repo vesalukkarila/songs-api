@@ -35,8 +35,10 @@ public class SongInitializer implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if (songService.findAll().isEmpty()) {
-            SongDto songDto = new SongDto("Thunderstruck", "AC/DC", 1990);
-            songService.createSong(songDto);
+            SongDto thunderstruck = new SongDto("Thunderstruck", "AC/DC", 1990);
+            songService.createSong(thunderstruck);
+            SongDto rokkibaby = new SongDto("Rokkibaby", "Frederik", 1975);
+            songService.createSong(rokkibaby);
         }
     }
 }
