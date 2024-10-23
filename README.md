@@ -42,6 +42,10 @@ To run the application, you have two choices:
     ```
 3. Open the api in http://localhost:8080
 
+## Documentation
+Since this project is developed in plain Spring (which doesn't natively support Swagger), the OpenAPI specification has been manually written to describe the API endpoints, request bodies, responses, and error handling. Documentation is hosted at github pages:
+https://vesalukkarila.github.io/songs-api/
+
 ## Endpoints
 
 <details>
