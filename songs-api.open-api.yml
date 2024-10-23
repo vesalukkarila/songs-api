@@ -291,7 +291,6 @@ components:
           description: Artist who recorded the song.
         publish_year:
           type: integer
-          format: int32
           description: The year the song was recorded.
     SongAlreadyExists:
       type: object
@@ -322,7 +321,8 @@ components:
       properties:
         message:
           type: string
-          example: "Given identifier (ccc951a-25cf-4009-bfb1-b8ef4300db46) is invalid. Expected format: 8-4-4-4-12 hex."
+          example: "Given identifier (ccc951a-25cf-4009-bfb1-b8ef4300db46) is invalid. 
+          Expected format: 8-4-4-4-12 hex."
     SongNotFound:
       type: object
       properties:
