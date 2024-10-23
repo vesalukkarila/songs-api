@@ -26,36 +26,42 @@ paths:
       operationId: getSongs
       responses:
         '200':
-          description: A list of all songs
+          description: OK
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Song'
+                  $ref: '#/components/schemas/AllSongs'
     post:
       summary: Create a new song
       operationId: createSong
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSongRequest'
+
       responses:
         '201':
-          description: Song created successfully
+          description: Song created successfully.
           headers:
             Location:
-              description: URL of the created song
+              description: URL of the created song.
               schema:
                 type: string
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Song'
+                $ref: '#/components/schemas/CreateSongResponse'
         '400':
-          description: Bad request
+          description: Bad request. Invalid field(s) in request body.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
         '409':
-          description: Conflict with already existing song
+          description: Conflict with already existing song.
           content:
             application/json:
               schema:
@@ -68,24 +74,33 @@ paths:
 
 components:
   schemas:
-    Song:
+    AllSongs:
       type: object
       properties:
         id:
           type: string
           format: uuid
+          description: The id of the song.
         name:
           type: string
-          example: Thunderstruck
+          description: The name of the song.
         artist:
           type: string
-          example: AC/DC
+          description: Artist who recorded the song.
         publish_year:
           type: integer
           format: int32
-          example: 1990
-    PutSongDto:
-      type: object
+          description: The year the song was recorded.
+      example:
+        - id: 0fa4ab70-379c-423e-8a89-c1fd344c685c
+          name: Thunderstruck
+          artist: AC/DC
+          publish_year: 1990
+        - id: 2fd527f0-d068-4834-ad64-5ddc60fcbba8
+          name: Rokkibaby
+          artist: Frederik
+          publish_year: 1975
+    CreateSongRequest:
       required:
         - name
         - artist
@@ -93,11 +108,41 @@ components:
       properties:
         name:
           type: string
+          description: The name of the song.
         artist:
           type: string
+          description: Artist who recorded the song.
         publish_year:
           type: integer
           format: int32
+          description: The year the song was recorded.
+      example:
+        - name: The Thrill is Gone
+          artist: B.B. King
+          publish_year: 1969
+    CreateSongResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The id of the song.
+        name:
+          type: string
+          description: The name of the song.
+        artist:
+          type: string
+          description: Artist who recorded the song.
+        publish_year:
+          type: integer
+          format: int32
+          description: The year the song was recorded.
+      example:
+        - id: 7ccc951a-25cf-4009-bfb1-b8ef4300db46
+          name: The Thrill is Gone
+          artist: B.B. King
+          publish_year: 1969
+
     SongAlreadyExists:
       type: object
       properties:
