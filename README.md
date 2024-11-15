@@ -1,6 +1,6 @@
 
 # songs-api
-A RESTful API for managing songs, implemented using **plain Spring features without Spring Boot**.  
+My very first RESTful API for managing songs, implemented using **plain Spring features without Spring Boot**.  
 This project provides CRUD functionality for song records, utilizing Spring MVC, Spring Validation, and a custom in-memory database (H2).
 
 ## Technologies Used
